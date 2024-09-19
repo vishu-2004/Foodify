@@ -30,6 +30,7 @@ const TabNavigator = () => {
                 shadowOpacity: 0.1,
                 shadowOffset: { width: 0, height: 10 },
                 shadowRadius: 10,
+                zIndex:1,
             },
             tabBarLabelStyle: {
                 fontSize: 14,
