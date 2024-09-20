@@ -8,10 +8,11 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 const truncateSummary = (summary, maxLength) => {
   if (summary.length <= maxLength) return summary;
-  return summary.slice(0, maxLength) + '...';
+  const text =  summary.slice(0, maxLength) + '...';
+  return text.replace(/<[^>]*>?/gm, '');
 };
-const LargeRecipeCard = ({title,img,cal,time,summary}) => {
-  const maxLength = 40;
+const LargeRecipeCard = ({id,title,img,cal,time,summary}) => {
+  const maxLength = 55;
   const truncatedSummary = truncateSummary(summary,maxLength)
   return (
     <View className="items-center mb-[-20]">

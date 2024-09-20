@@ -14,6 +14,10 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import axios from 'axios';
+import LargeRecipeCard from './LargeRecipeCard'
+import  { useNavigation } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 
 
 const apiKey = 'c1c7bf80fce74634ae18b9271af99c50';
@@ -86,23 +90,19 @@ const HomeScreen = () => {
         return "";
       }
       else {
-        prevcat === cat ? "" : cat;
+        return cat;
       }
     })
     if (cat === activeCat) {
       return;
     }
     try {
-      setisLoading(true)
-      const count = 0;
+      setisLoading(true);
       const response = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&type=${cat}&addRecipeInformation=true&number=20&addRecipeNutrition=true`);
 
-      const data = response.data;
-      if (count <= 15) {
-        const filteredData = data.results.filter(recipes => recipes.title.length <= 60);
-        setcatRecipes(filteredData);
-        count++;
-      }
+      const filteredData = response.data.results.filter(recipes => recipes.title.length <= 60);
+      setcatRecipes(filteredData);
+
 
     }
     catch (error) {
@@ -117,9 +117,16 @@ const HomeScreen = () => {
   return (
     <SafeAreaView className=" flex-1 mb-22">
       <StatusBar style='dark' />
+      <KeyboardAwareScrollView
+        style={{ flex: 1 }}
+        
+        keyboardShouldPersistTaps='handled'
+        
+        enableOnAndroid={true}
+      >
       <ScrollView>
         <Header />
-        <View >
+        
           <View>
             <Text className="mt-2 ml-[17px] text-lg">Hello, Vishal! 👋</Text>
             <Text className="mt-3 ml-4 text-[30px] mb-1  font-medium tracking-wide">Ready to <Text className="text-[#FC8019] font-bold">Cook</Text> something</Text>
@@ -138,7 +145,7 @@ const HomeScreen = () => {
                 <SafeAreaView key={index}>
                   <TouchableOpacity
                     className="flex flex-row mx-1 my-2"
-                    onPress={handleCatSelect(cat.name)}
+                    onPress={()=>handleCatSelect(cat.name)}
                   >
                     <View
                       className={`flex flex-row space-x-0 rounded-3xl align-middle border-amber-600 border-spacing-3 border-2 h-[45px] w-[110px] ${setActiveColor}`}
@@ -166,10 +173,27 @@ const HomeScreen = () => {
             isLoading ? (
               <ActivityIndicator size="large" color="#FC8019" />
             ) : (
-              <ScrollView>
+              <ScrollView >
                 {/* ///display ui */}
+                <View className = "flex-1 h-max pb-32">
+                {catRecipes.map((recipe)=>{
+                  const calories = recipe.nutrition.nutrients.find(nutrient=> nutrient.name === "Calories");
+                  const cal = calories?Math.round(calories.amount):190;
+                  return(
+                    <LargeRecipeCard
+                    key={recipe.id}
+                    id = {recipe.id}
+                    title = {recipe.title}
+                    time = {recipe.readyInMinutes}
+                    summary={recipe.summary}
+                    img = {recipe.image}
+                    cal={cal}
+                    />
+                  )
+                })}
+                </View>
               </ScrollView>
-            )) : (<Text></Text>)}
+            )) : (<>
 
 
 
@@ -303,11 +327,12 @@ const HomeScreen = () => {
           })}
         </ScrollView>
         
-
-      </View>
+        </>
+      )}
    
 
     </ScrollView>
+    </KeyboardAwareScrollView>
     </SafeAreaView >
   )
 }
