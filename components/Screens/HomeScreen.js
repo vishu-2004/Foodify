@@ -20,7 +20,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 
 
-const apiKey = 'c1c7bf80fce74634ae18b9271af99c50';
+const apiKey = 'xxxxxxxxx';
 const HomeScreen = () => {
   useEffect(() => {
     // dispatch(getPopularRecipes());
