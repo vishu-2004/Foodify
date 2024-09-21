@@ -4,7 +4,7 @@ import { GET_POPULAR_RECIPES,getPopularRecipesSuccess,getPopularRecipesError, ge
 
 const count = 7;
 function* getPopularRecipes(){
-    const apiKey = 'c1c7bf80fce74634ae18b9271af99c50';
+    const apiKey = 'xxxxx';
 
     const url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&sort=popularity&cuisine=italian&cuisine=asian&addRecipeInformation=true&number=7&addRecipeNutrition=true`;
     try{
