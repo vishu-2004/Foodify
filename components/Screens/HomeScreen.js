@@ -17,16 +17,21 @@ import axios from 'axios';
 import LargeRecipeCard from './LargeRecipeCard'
 import  { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import SearchScreen from './SearchScreen'
+// import Config from "react-native-config";
+
+// Config.API_KEY; 
+const API_KEY="048a4f611f2e4d75bce953d398fbcbfd"
 
 
 
-const apiKey = 'c1c7bf80fce74634ae18b9271af99c50';
+
 const HomeScreen = () => {
   useEffect(() => {
     // dispatch(getPopularRecipes());
-    // dispatch(getTrendingRecipes());
+    dispatch(getTrendingRecipes());
     // dispatch(getRecommendedRecipes());
-  }, [dispatch]);
+  }, []);
 
   const categories = [
     {
@@ -71,7 +76,10 @@ const HomeScreen = () => {
   const error = useSelector((state) => state.recipeReducer.error);
   const [catRecipes, setcatRecipes] = useState([]);
   const [isLoading, setisLoading] = useState(false);
+  const searchFocus = useSelector((state) => state.recipeReducer.searchFocus);
+  const searchQuery = useSelector((state) => state.recipeReducer.searchQuery);
 
+ 
   if (loading) {
     return <ActivityIndicator size="large" color="#FC8019" />;
   }
@@ -98,7 +106,7 @@ const HomeScreen = () => {
     }
     try {
       setisLoading(true);
-      const response = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&type=${cat}&addRecipeInformation=true&number=20&addRecipeNutrition=true`);
+      const response = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&type=${cat}&addRecipeInformation=true&number=20&addRecipeNutrition=true`);
 
       const filteredData = response.data.results.filter(recipes => recipes.title.length <= 60);
       setcatRecipes(filteredData);
@@ -120,13 +128,18 @@ const HomeScreen = () => {
       <KeyboardAwareScrollView
         style={{ flex: 1 }}
         
-        keyboardShouldPersistTaps='handled'
+        
         
         enableOnAndroid={true}
       >
-      <ScrollView>
+      
         <Header />
-        
+        {searchFocus && 
+          <SearchScreen searchQuery={searchQuery}/>
+          
+        }
+        {!searchFocus &&
+        <ScrollView>
           <View>
             <Text className="mt-2 ml-[17px] text-lg">Hello, Vishal! 👋</Text>
             <Text className="mt-3 ml-4 text-[30px] mb-1  font-medium tracking-wide">Ready to <Text className="text-[#FC8019] font-bold">Cook</Text> something</Text>
@@ -329,9 +342,10 @@ const HomeScreen = () => {
         
         </>
       )}
-   
+    
 
     </ScrollView>
+}
     </KeyboardAwareScrollView>
     </SafeAreaView >
   )

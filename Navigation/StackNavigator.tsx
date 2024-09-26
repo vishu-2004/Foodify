@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Favourites from "../components/Screens/Favourites";
 import PostRecipe from "../components/Screens/PostRecipe";
 import ProfileScreen from "../components/Screens/ProfileScreen";
+import SearchScreen from "../components/Screens/SearchScreen";
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ const HomeStackNavigator = ()=>{
   return(
     <Stack.Navigator screenOptions={{headerShown:false}}>
     <Stack.Screen name="Home" component={HomeScreen}/>
+    <Stack.Screen name="SearchScreen" component={SearchScreen} />
     </Stack.Navigator>
   );
 

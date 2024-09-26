@@ -4,7 +4,9 @@ import {
   GET_POPULAR_RECIPES_SUCCESS,
   GET_TRENDING_RECIPES,
   GET_TRENDING_RECIPES_ERROR,
-  GET_TRENDING_RECIPES_SUCCESS,GET_RECOMMENDED_RECIPES,GET_RECOMMENDED_RECIPES_SUCCESS,GET_RECOMMENDED_RECIPES_ERROR
+  GET_TRENDING_RECIPES_SUCCESS,GET_RECOMMENDED_RECIPES,GET_RECOMMENDED_RECIPES_SUCCESS,GET_RECOMMENDED_RECIPES_ERROR,
+  SET_SEARCH_QUERY,
+  SET_SEARCH_FOCUS
 } from "./action";
 
 const initialState = {
@@ -13,6 +15,9 @@ const initialState = {
   trendingRecipes: [],
   recommendedRecipes:[],
   error: null,
+  searchFocus:false,
+  searchQuery:""
+
 };
 
 export const recipeReducer = (state = initialState, action) => {
@@ -53,7 +58,11 @@ export const recipeReducer = (state = initialState, action) => {
         };
       case GET_RECOMMENDED_RECIPES_ERROR:
         return { ...state, loading: false, error: action.payload };
-
+      //search func
+      case SET_SEARCH_FOCUS:
+        return {...state , searchFocus: action.payload};
+      case SET_SEARCH_QUERY:
+        return {...state, searchQuery: action.payload};
     default:
       return state;
   }

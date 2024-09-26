@@ -9,6 +9,9 @@ export const GET_TRENDING_RECIPES_ERROR = 'GET_TRENDING_RECIPES_ERROR'
 export const GET_RECOMMENDED_RECIPES = 'GET_RECOMMENDED_RECIPES';
 export const GET_RECOMMENDED_RECIPES_SUCCESS = 'GET_RECOMMENDED_RECIPES_SUCCESS'
 export const GET_RECOMMENDED_RECIPES_ERROR = 'GET_RECOMMENDED_RECIPES_ERROR'
+//SEARCH FUNCTIONALITY
+export const SET_SEARCH_FOCUS = 'SET_SEARCH_FOCUS';
+export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';
 
 export const getPopularRecipes = ()=>({
     type: GET_POPULAR_RECIPES
@@ -51,3 +54,16 @@ export const getRecommendedRecipesError = (error) =>({
     payload: error
     
 });
+
+//SEARCH FUNCTIONALITY
+export const setSearchQuery = (text) =>({
+    type: SET_SEARCH_QUERY,
+    payload: text
+    
+});
+export const setSearchFocus = (focusState) => {
+    return {
+      type: SET_SEARCH_FOCUS,
+      payload: focusState,
+    };
+  };
