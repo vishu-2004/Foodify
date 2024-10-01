@@ -6,8 +6,11 @@ import createSagaMiddleware from "redux-saga"
 const sagaMiddleware = createSagaMiddleware();
 const store = configureStore({
     reducer:root_reducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
-})
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        immutableCheck: false,
+        serializableCheck: false,
+}).concat(sagaMiddleware),
+});
 
 sagaMiddleware.run(SagaData);
 
