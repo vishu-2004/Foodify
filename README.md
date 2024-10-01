@@ -20,5 +20,9 @@
         <li><strong>Styling:</strong> Tailwind CSS</li>
         <li><strong>API:</strong> Spoonacular API for recipes and meal data</li>
     </ul>
+    
+<img src="https://github.com/user-attachments/assets/b0819dae-0c47-4a0c-a52c-f12481dd2687" width="250" style="margin-right: 50px; margin-bottom: 20px;">
+<img src="https://github.com/user-attachments/assets/a8d4a173-3157-4208-ba0a-216581933f78" width="250" style="margin-right: 20px; margin-bottom: 20px;">
 
- 
+
+

@@ -14,10 +14,11 @@ import {
 } from './action';
 
 const count = 7;
-const API_KEY="048a4f611f2e4d75bce953d398fbcbfd"
-function* getPopularRecipes() {
-    const url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&sort=popularity&cuisine=italian&cuisine=asian&addRecipeInformation=true&number=7&addRecipeNutrition=true`;
-    try {
+function* getPopularRecipes(){
+    const apiKey = 'xxxxx';
+
+    const url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&sort=popularity&cuisine=italian&cuisine=asian&addRecipeInformation=true&number=7&addRecipeNutrition=true`;
+    try{
         const response = yield call(fetch, url);
         const data = yield response.json();
         const popularRecipes = data.results;

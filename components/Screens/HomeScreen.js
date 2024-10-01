@@ -26,6 +26,10 @@ const API_KEY="048a4f611f2e4d75bce953d398fbcbfd"
 
 
 
+
+
+
+const apiKey = 'xxxxxxxxx';
 const HomeScreen = () => {
   useEffect(() => {
     // dispatch(getPopularRecipes());
