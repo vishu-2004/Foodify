@@ -4,8 +4,13 @@ import EvilIcons from '@expo/vector-icons/EvilIcons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Entypo from '@expo/vector-icons/Entypo';
+import { useNavigation } from '@react-navigation/native';
 
-const RecipeCard = ({ title, time, id, img ,cal}) => {
+const RecipeCard = ({recipe}) => {
+  let calorieNutrient = recipe.nutrition.nutrients.find(nutrient => nutrient.name === "Calories");
+  const navigation = useNavigation();
+
+  let calories = calorieNutrient ? Math.round(calorieNutrient.amount) : 0;
   return (
     <View>
       <TouchableOpacity 
@@ -17,6 +22,7 @@ const RecipeCard = ({ title, time, id, img ,cal}) => {
           shadowRadius: 5,           
           elevation: 5,              
         }}
+        onPress={() => navigation.navigate('RecipeDetailsScreen', {recipe})}
       >
         {/* Image container */}
         <View className="h-[65%] w-full justify-center align-middle relative">
@@ -25,20 +31,20 @@ const RecipeCard = ({ title, time, id, img ,cal}) => {
           </TouchableOpacity>
           <Image 
             className="w-[218px] h-full object-cover rounded-2xl" 
-            source={{ uri: img }} 
+            source={{ uri: recipe.image }} 
           />
         </View>
 
         {/* Details container */}
         <View className="bg-white w-full h-[35%] mt-[5]">
-          <Text className="text-[16px] ml-2 font-semibold">{title}</Text>
+          <Text className="text-[16px] ml-2 font-semibold">{recipe.title}</Text>
           <View className="ml-2 mt-2 flex-row items-center opacity-60">
             <Feather name="clock" size={18} color="black" />
-            <Text className="ml-1  text-[14px]">{time} min</Text>
+            <Text className="ml-1  text-[14px]">{recipe.readyInMinutes} min</Text>
             <Entypo name="dot-single" size={24} color="black" />
             <View className = "opacity-90 flex-row">
               <FontAwesome6 name="fire" size={17} color="black" />
-              <Text className = "ml-1 ">{cal} cal</Text>
+              <Text className = "ml-1 ">{calories} cal</Text>
             </View>
           </View>
         </View>

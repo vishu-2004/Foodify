@@ -14,13 +14,17 @@ import {
 } from './action';
 
 const count = 7;
+// const API_KEY = "521f9afe181e4f82bada0f717fa2283c" ; 
+const API_KEY = "048a4f611f2e4d75bce953d398fbcbfd";
 function* getPopularRecipes(){
-    const apiKey = 'xxxxx';
+    const apiKey = '048a4f611f2e4d75bce953d398fbcbfd';
+    // const apiKey = "521f9afe181e4f82bada0f717fa2283c"
 
-    const url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&sort=popularity&cuisine=italian&cuisine=asian&addRecipeInformation=true&number=7&addRecipeNutrition=true`;
+    const url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&cuisine=italian&cuisine=asian&addRecipeInformation=true&number=10&addRecipeNutrition=true&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=true&fillIngredients=true`;
     try{
         const response = yield call(fetch, url);
         const data = yield response.json();
+        
         const popularRecipes = data.results;
         yield put(getPopularRecipesSuccess(popularRecipes));
     } catch (error) {
@@ -29,7 +33,7 @@ function* getPopularRecipes(){
 }
 
 function* getTrendingRecipes() {
-    const url = `https://api.spoonacular.com/recipes/random?apiKey=${API_KEY}&number=7&includeNutrition=true&include-tags=vegetarian`;
+    const url = `https://api.spoonacular.com/recipes/random?apiKey=${API_KEY}&number=7&includeNutrition=true&include-tags=vegetarian&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=truefillIngredients=true`;
     try {
         const response = yield call(fetch, url);
         const data = yield response.json();
@@ -41,7 +45,7 @@ function* getTrendingRecipes() {
 }
 
 function* getRecommendedRecipes() {
-    const url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&cuisine=indian&addRecipeInformation=true&number=8&addRecipeNutrition=true`;
+    const url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&cuisine=indian&addRecipeInformation=true&number=8&addRecipeNutrition=true&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=true&fillIngredients=true`;
     try {
         let currcount = 0;
         const response = yield call(fetch, url);

@@ -14,6 +14,8 @@ import store from './components/redux/store';
 
 
 
+
+
 export default function App() {
   const EntryStack = createStackNavigator();
   return (

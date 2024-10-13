@@ -8,6 +8,8 @@ import Favourites from "../components/Screens/Favourites";
 import PostRecipe from "../components/Screens/PostRecipe";
 import ProfileScreen from "../components/Screens/ProfileScreen";
 import SearchScreen from "../components/Screens/SearchScreen";
+import RecipeDetailsScreen from "../components/Screens/RecipeDetailsScreen";
+import RecipeOfTheDayDetails from "../components/Screens/RecipeOfTheDayDetails";
 
 const Stack = createStackNavigator();
 
@@ -16,6 +18,8 @@ const HomeStackNavigator = ()=>{
     <Stack.Navigator screenOptions={{headerShown:false}}>
     <Stack.Screen name="Home" component={HomeScreen}/>
     <Stack.Screen name="SearchScreen" component={SearchScreen} />
+    <Stack.Screen name="RecipeDetailsScreen" component={RecipeDetailsScreen}/>
+    <Stack.Screen name="RecipeOfTheDayDetails" component={RecipeOfTheDayDetails}/>
     </Stack.Navigator>
   );
 

@@ -9,14 +9,17 @@ import axios from 'axios';
 import _ from "lodash";
 
 
-const SearchScreen = ({ isFocused }) => {
+const SearchScreen = () => {
   const dispatch = useDispatch();
   const searchQuery = useSelector((state) => state.recipeReducer.searchQuery);
   const trendingRecipes = useSelector((state) => state.recipeReducer.trendingRecipes);
   const [searchRecipeResult, setSearchRecipeResult] = useState([]);
   console.log(trendingRecipes.length);
+  
 
-  const apiKey = "048a4f611f2e4d75bce953d398fbcbfd";
+
+  // const apiKey = "048a4f611f2e4d75bce953d398fbcbfd";
+  const apiKey = "521f9afe181e4f82bada0f717fa2283c";
 
   const fetchSearchRecipes = async (searchQuery) => {
     try {
@@ -80,17 +83,13 @@ const SearchScreen = ({ isFocused }) => {
           <ScrollView className="mb-20" showsHorizontalScrollIndicator={false}>
             {trendingRecipes.length > 0 ? (
               trendingRecipes.map((recipe) => {
-                let calorieNutrient = recipe.nutrition.nutrients.find((nutrient) => nutrient.name === "Calories");
-                let calories = calorieNutrient ? Math.round(calorieNutrient.amount) : 0;
+                
 
                 return (
                   <View className="flex-col" key={recipe.id}>
                     <SearchRecipeCard
-                      id={recipe.id}
-                      title={recipe.title}
-                      time={recipe.readyInMinutes}
-                      img={recipe.image}
-                      cal={calories}
+                    recipe = {recipe}
+                      
                     />
                   </View>
                 );

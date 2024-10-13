@@ -24,7 +24,7 @@ import SearchScreen from './SearchScreen'
 const API_KEY="048a4f611f2e4d75bce953d398fbcbfd"
 
 
-
+// const API_KEY="521f9afe181e4f82bada0f717fa2283c"
 
 
 
@@ -32,11 +32,12 @@ const API_KEY="048a4f611f2e4d75bce953d398fbcbfd"
 const apiKey = 'xxxxxxxxx';
 const HomeScreen = () => {
   useEffect(() => {
-    // dispatch(getPopularRecipes());
-    // dispatch(getTrendingRecipes());
-    // dispatch(getRecommendedRecipes());
+    dispatch(getPopularRecipes());
+    dispatch(getTrendingRecipes());
+    dispatch(getRecommendedRecipes());
   }, []);
 
+  const navigation = useNavigation();
   const categories = [
     {
       id: 1,
@@ -110,7 +111,7 @@ const HomeScreen = () => {
     }
     try {
       setisLoading(true);
-      const response = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&type=${cat}&addRecipeInformation=true&number=20&addRecipeNutrition=true`);
+      const response = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&type=${cat}&addRecipeInformation=true&number=20&addRecipeNutrition=true&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=true&fillIngredients=true`);
 
       const filteredData = response.data.results.filter(recipes => recipes.title.length <= 60);
       setcatRecipes(filteredData);
@@ -129,17 +130,17 @@ const HomeScreen = () => {
   return (
     <SafeAreaView className=" flex-1 mb-22">
       <StatusBar style='dark' />
-      <KeyboardAwareScrollView
+      {/* <KeyboardAwareScrollView
         style={{ flex: 1 }}
         
         
         
         enableOnAndroid={true}
-      >
+      > */}
       
         <Header />
         {searchFocus && 
-          <SearchScreen searchQuery={searchQuery}/>
+          <SearchScreen />
           
         }
         {!searchFocus &&
@@ -194,17 +195,11 @@ const HomeScreen = () => {
                 {/* ///display ui */}
                 <View className = "flex-1 h-max pb-32">
                 {catRecipes.map((recipe)=>{
-                  const calories = recipe.nutrition.nutrients.find(nutrient=> nutrient.name === "Calories");
-                  const cal = calories?Math.round(calories.amount):190;
+                  
                   return(
                     <LargeRecipeCard
                     key={recipe.id}
-                    id = {recipe.id}
-                    title = {recipe.title}
-                    time = {recipe.readyInMinutes}
-                    summary={recipe.summary}
-                    img = {recipe.image}
-                    cal={cal}
+                    recipe = {recipe}
                     />
                   )
                 })}
@@ -228,6 +223,8 @@ const HomeScreen = () => {
               shadowRadius: 5,
               elevation: 5,
             }}
+
+            // onPress={()=>navigation.navigate("RecipeOfTheDayDetails")}
           >
             {/* heart icon  */}
             <TouchableOpacity className="absolute top-3 left-3 z-10 opacity-90 items-center bg-white p-1 py-[5] rounded-full">
@@ -260,6 +257,7 @@ const HomeScreen = () => {
                   shadowRadius: 5,
                   elevation: 7,
                 }}
+                onPress={()=>navigation.navigate("RecipeDetailsScreen")}
               >
                 <Text className="text-white text-[15px] ml-3 mr-2 font-bold">Try Now</Text>
                 <AntDesign name="arrowright" size={21} color="white" />
@@ -278,19 +276,12 @@ const HomeScreen = () => {
 
 
 
-            let calorieNutrient = recipe.nutrition.nutrients.find(nutrient => nutrient.name === "Calories");
-
-
-            let calories = calorieNutrient ? Math.round(calorieNutrient.amount) : 0;
+            
             return (
               <RecipeCard
                 key={recipe.id}
-                id={recipe.id}
-                img={recipe.image}
-                title={recipe.title}
-                time={recipe.readyInMinutes}
-                cal={calories}
-                onPress={() => console.warn(`Selected recipe: ${recipe.title}`)}
+                recipe = {recipe}
+                
               />)
 
           })}
@@ -309,12 +300,8 @@ const HomeScreen = () => {
             return (
               <RecipeCard
                 key={recipe.id}
-                id={recipe.id}
-                img={recipe.image}
-                title={recipe.title}
-                time={recipe.readyInMinutes}
-                cal={calories}
-                onPress={() => console.warn(`Selected recipe: ${recipe.title}`)}
+                recipe = {recipe}
+                
               />)
 
           })}
@@ -333,12 +320,8 @@ const HomeScreen = () => {
             return (
               <RecipeCard
                 key={recipe.id}
-                id={recipe.id}
-                img={recipe.image}
-                title={recipe.title}
-                time={recipe.readyInMinutes}
-                cal={calories}
-                onPress={() => console.warn(`Selected recipe: ${recipe.title}`)}
+                recipe = {recipe}
+                
               />)
 
           })}
@@ -350,7 +333,7 @@ const HomeScreen = () => {
 
     </ScrollView>
 }
-    </KeyboardAwareScrollView>
+    {/* </KeyboardAwareScrollView> */}
     </SafeAreaView >
   )
 }

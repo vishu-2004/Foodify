@@ -51,7 +51,7 @@ const TabNavigator = () => {
           ),
         }}  
       />
-      <TabNav.Screen 
+       <TabNav.Screen 
         name="Upload" 
         component={PostRecipeStackNavigator}
         options={{
@@ -89,7 +89,7 @@ const TabNavigator = () => {
             )
           ),
         }}
-      />
+      /> 
     </TabNav.Navigator>
   );
 }
