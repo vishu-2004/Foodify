@@ -10,17 +10,26 @@ import ProfileScreen from "../components/Screens/ProfileScreen";
 import SearchScreen from "../components/Screens/SearchScreen";
 import RecipeDetailsScreen from "../components/Screens/RecipeDetailsScreen";
 import RecipeOfTheDayDetails from "../components/Screens/RecipeOfTheDayDetails";
+import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 
 const Stack = createStackNavigator();
 
+const SharedStack = createSharedElementStackNavigator();
+
 const HomeStackNavigator = ()=>{
   return(
-    <Stack.Navigator screenOptions={{headerShown:false}}>
-    <Stack.Screen name="Home" component={HomeScreen}/>
-    <Stack.Screen name="SearchScreen" component={SearchScreen} />
-    <Stack.Screen name="RecipeDetailsScreen" component={RecipeDetailsScreen}/>
-    <Stack.Screen name="RecipeOfTheDayDetails" component={RecipeOfTheDayDetails}/>
-    </Stack.Navigator>
+    <SharedStack.Navigator screenOptions={{headerShown:false}}>
+    <SharedStack.Screen name="Home" component={HomeScreen}/>
+    <SharedStack.Screen 
+        name="SearchScreen" 
+        component={SearchScreen} 
+        sharedElements={(route, otherRoute, showing) => {
+          return ['header']; 
+        }}
+      />
+    <SharedStack.Screen name="RecipeDetailsScreen" component={RecipeDetailsScreen}/>
+    <SharedStack.Screen name="RecipeOfTheDayDetails" component={RecipeOfTheDayDetails}/>
+    </SharedStack.Navigator>
   );
 
 }

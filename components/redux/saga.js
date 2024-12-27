@@ -1,6 +1,4 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import Config from "react-native-config";  // Import Config to use the API_KEY from .env
-
 import { 
   GET_POPULAR_RECIPES,
   getPopularRecipesSuccess,
@@ -13,57 +11,92 @@ import {
   getRecommendedRecipesSuccess 
 } from './action';
 
-const count = 7;
-// const API_KEY = "521f9afe181e4f82bada0f717fa2283c" ; 
-const API_KEY = "048a4f611f2e4d75bce953d398fbcbfd";
-function* getPopularRecipes(){
-    const apiKey = '048a4f611f2e4d75bce953d398fbcbfd';
-    // const apiKey = "521f9afe181e4f82bada0f717fa2283c"
+// Store your API keys in an array
+const API_KEYS = [
+  "521f9afe181e4f82bada0f717fa2283c",
+  "c1c7bf80fce74634ae18b9271af99c50",
+  "048a4f611f2e4d75bce953d398fbcbfd",
+  
+];
 
-    const url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&cuisine=italian&cuisine=asian&addRecipeInformation=true&number=10&addRecipeNutrition=true&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=true&fillIngredients=true`;
-    try{
-        const response = yield call(fetch, url);
-        const data = yield response.json();
-        
-        const popularRecipes = data.results;
-        yield put(getPopularRecipesSuccess(popularRecipes));
+// Function to find a working API key
+function* findWorkingApiKey(baseUrl) {
+  for (let i = 0; i < API_KEYS.length; i++) {
+    const apiKey = API_KEYS[i];
+    const url = baseUrl.replace(/apiKey=([^&]+)/, `apiKey=${apiKey}`);
+    
+    try {
+      const response = yield call(fetch, url);
+      const data = yield response.json();
+      
+      // Check if the API call was successful
+      if (!data.error && data.code !== 402) {
+        return { apiKey, url, data };
+      }
     } catch (error) {
-        yield put(getPopularRecipesError(error.message));
+      console.log(`Error with API key ${apiKey}:`, error);
     }
+  }
+  
+  // If no working key is found
+  return null;
+}
+
+function* getPopularRecipes() {
+  const baseUrl = `https://api.spoonacular.com/recipes/complexSearch?apiKey=PLACEHOLDER_KEY&cuisine=italian&cuisine=asian&addRecipeInformation=true&number=10&addRecipeNutrition=true&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=true&fillIngredients=true`;
+
+  const result = yield call(findWorkingApiKey, baseUrl);
+  
+  if (result) {
+    try {
+      yield put(getPopularRecipesSuccess(result.data.results));
+    } catch (error) {
+      yield put(getPopularRecipesError("Unable to fetch popular recipes"));
+    }
+  } else {
+    yield put(getPopularRecipesError("No working API keys found"));
+  }
 }
 
 function* getTrendingRecipes() {
-    const url = `https://api.spoonacular.com/recipes/random?apiKey=${API_KEY}&number=7&includeNutrition=true&include-tags=vegetarian&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=truefillIngredients=true`;
+  const baseUrl = `https://api.spoonacular.com/recipes/random?apiKey=PLACEHOLDER_KEY&number=7&includeNutrition=true&include-tags=vegetarian&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=truefillIngredients=true`;
+
+  const result = yield call(findWorkingApiKey, baseUrl);
+  
+  if (result) {
     try {
-        const response = yield call(fetch, url);
-        const data = yield response.json();
-        const trendingRecipes = data.recipes;
-        yield put(getTrendingRecipesSuccess(trendingRecipes));
+      console.log(result.data.recipes)
+      const trendingRecipes = result.data.recipes.filter(recipe => recipe.title.length <= 50);
+      yield put(getTrendingRecipesSuccess(trendingRecipes));
     } catch (error) {
-        yield put(getTrendingRecipesError(error.message));
+      yield put(getTrendingRecipesError("Unable to fetch trending recipes"));
     }
+  } else {
+    yield put(getTrendingRecipesError("No working API keys found"));
+  }
 }
 
 function* getRecommendedRecipes() {
-    const url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&cuisine=indian&addRecipeInformation=true&number=8&addRecipeNutrition=true&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=true&fillIngredients=true`;
+  const baseUrl = `https://api.spoonacular.com/recipes/complexSearch?apiKey=PLACEHOLDER_KEY&cuisine=indian&addRecipeInformation=true&number=8&addRecipeNutrition=true&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=true&fillIngredients=true`;
+
+  const result = yield call(findWorkingApiKey, baseUrl);
+  
+  if (result) {
     try {
-        let currcount = 0;
-        const response = yield call(fetch, url);
-        const data = yield response.json();
-        if (currcount <= count) {
-            const recommendedRecipes = data.results.filter(recipe => recipe.title.length <= 50);
-            yield put(getRecommendedRecipesSuccess(recommendedRecipes));
-            currcount++;
-        }
+      const recommendedRecipes = result.data.results.filter(recipe => recipe.title.length <= 50);
+      yield put(getRecommendedRecipesSuccess(recommendedRecipes));
     } catch (error) {
-        yield put(getRecommendedRecipesError(error.message));
+      yield put(getRecommendedRecipesError("Unable to fetch recommended recipes"));
     }
+  } else {
+    yield put(getRecommendedRecipesError("No working API keys found"));
+  }
 }
 
 function* SagaData() {
-    yield takeLatest(GET_POPULAR_RECIPES, getPopularRecipes);
-    yield takeLatest(GET_TRENDING_RECIPES, getTrendingRecipes);
-    yield takeLatest(GET_RECOMMENDED_RECIPES, getRecommendedRecipes);
+  yield takeLatest(GET_POPULAR_RECIPES, getPopularRecipes);
+  yield takeLatest(GET_TRENDING_RECIPES, getTrendingRecipes);
+  yield takeLatest(GET_RECOMMENDED_RECIPES, getRecommendedRecipes);
 }
 
 export default SagaData;

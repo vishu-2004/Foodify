@@ -13,6 +13,12 @@ export const GET_RECOMMENDED_RECIPES_ERROR = 'GET_RECOMMENDED_RECIPES_ERROR'
 export const SET_SEARCH_FOCUS = 'SET_SEARCH_FOCUS';
 export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';
 
+//favourites
+export const ADD_TO_FAVOURITES = 'ADD_TO_FAVOURITES';
+export const REMOVE_FROM_FAVOURITES = 'REMOVE_FROM_FAVOURITES';
+export const SET_CURRENT_API_KEY_INDEX = 'SET_CURRENT_API_KEY_INDEX';
+
+
 export const getPopularRecipes = ()=>({
     type: GET_POPULAR_RECIPES
 });
@@ -67,3 +73,25 @@ export const setSearchFocus = (focusState) => {
       payload: focusState,
     };
   };
+
+//favourites
+
+export const addToFavourites = (item)=>{
+    return{
+        type:ADD_TO_FAVOURITES,
+        payload: item
+    };
+};
+
+export const removeFromFavourites = (item)=>{
+    return{
+        type:REMOVE_FROM_FAVOURITES,
+        payload: item
+    };
+};
+
+
+export const setCurrentApiKeyIndex = (index) => ({
+  type: SET_CURRENT_API_KEY_INDEX,
+  payload: index
+});

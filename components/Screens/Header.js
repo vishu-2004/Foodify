@@ -5,25 +5,25 @@ import {
   TouchableOpacity,
   TextInput,
   BackHandler,
-  Keyboard
 } from 'react-native';
 import React, { useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchFocus, setSearchQuery } from '../redux/action';
+import { useNavigation } from '@react-navigation/native';
 
-const Header = () => {
+const Header = ({ autoFocus = false }) => {
   const dispatch = useDispatch();
   const searchFocus = useSelector((state) => state.recipeReducer.searchFocus);
   const searchQuery = useSelector((state) => state.recipeReducer.searchQuery);
+  const navigation = useNavigation();
 
   const handleFocus = () => {
     if (!searchFocus) {
-      console.log("Input focused");
-      dispatch(setSearchFocus(true));
+      navigation.navigate("SearchScreen");
     }
   };
-  
+
   const handleBlur = () => {
     if (searchFocus) {
       console.log("Input blurred");
@@ -45,16 +45,13 @@ const Header = () => {
       return false; // Allow default back behavior (app can close)
     };
 
-    // Add back button event listener
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       handleBackPress
     );
 
-    return () => {
-      backHandler.remove(); // Clean up listener on unmount
-    };
-  }, [searchFocus, dispatch]);
+    return () => backHandler.remove(); // Clean up listener on unmount
+  }, []);
 
   return (
     <View className="sticky">
@@ -62,25 +59,43 @@ const Header = () => {
         <View className="bg-slate-100 w-[100%] h-25 pt-10 pb-2 flex flex-row items-center justify-between shadow-sm border-b-1 border-black fixed">
           <View className="items-center bg-slate-200 w-[75%] flex-row ml-7 rounded-3xl">
             <TouchableOpacity>
-              <FontAwesome style={{ marginLeft: 6, marginRight: -7, backgroundColor: "white", padding: 8, borderRadius: 25 }} name="search" size={21} color="black" />
+              <FontAwesome
+                style={{
+                  marginLeft: 6,
+                  marginRight: -7,
+                  backgroundColor: "white",
+                  padding: 8,
+                  borderRadius: 25,
+                }}
+                name="search"
+                size={21}
+                color="black"
+              />
             </TouchableOpacity>
             <TextInput
               cursorColor={"#FC8019"}
-              className="w-[80%] h-12 ml-4 rounded-2xl overflow-hidden"
-              placeholder='Search for Recipes'
+              className="w-[80%] font-Poppins mt-1 h-12 ml-4 rounded-2xl overflow-hidden"
+              placeholder="Search for Recipes"
               onChangeText={handleQueryChange}
               onFocus={handleFocus}
-              onBlur={handleBlur} // Prevent input blur
+              onBlur={handleBlur}
               value={searchQuery}
+              autoFocus={autoFocus}
+              
             />
           </View>
           <TouchableOpacity>
-            <FontAwesome style={{ marginRight: 24 }} name="bell-o" size={28} color="black" />
+            <FontAwesome
+              style={{ marginRight: 24 }}
+              name="bell-o"
+              size={28}
+              color="black"
+            />
           </TouchableOpacity>
         </View>
       </SafeAreaView>
     </View>
   );
-}
+};
 
 export default Header;

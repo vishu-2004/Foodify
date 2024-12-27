@@ -5,8 +5,10 @@ import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
+import Typography from '../Typography/Typography';
 
-const RecipeCard = ({recipe}) => {
+const RecipeCard = ({recipe,isFav}) => {
   let calorieNutrient = recipe.nutrition.nutrients.find(nutrient => nutrient.name === "Calories");
   const navigation = useNavigation();
 
@@ -22,12 +24,16 @@ const RecipeCard = ({recipe}) => {
           shadowRadius: 5,           
           elevation: 5,              
         }}
-        onPress={() => navigation.navigate('RecipeDetailsScreen', {recipe})}
+        onPress={() => navigation.navigate('RecipeDetailsScreen', {recipe,isFav})}
       >
         {/* Image container */}
         <View className="h-[65%] w-full justify-center align-middle relative">
-          <TouchableOpacity className="absolute top-1 right-1 z-10 opacity-90 items-center bg-white p-1 py-[5] rounded-full">
-            <EvilIcons name="heart" size={29} color="red" />
+          <TouchableOpacity className="absolute top-1 right-1 z-10 opacity-90 items-center bg-white p-2 py-[6] pt-2 rounded-full">
+          {isFav == true?
+            <MaterialIcons name="favorite" size={26} color="#FF007A" />
+            :
+            <MaterialIcons name="favorite-border" size={24} color="#FF007A" />
+          }
           </TouchableOpacity>
           <Image 
             className="w-[218px] h-full object-cover rounded-2xl" 
@@ -37,14 +43,14 @@ const RecipeCard = ({recipe}) => {
 
         {/* Details container */}
         <View className="bg-white w-full h-[35%] mt-[5]">
-          <Text className="text-[16px] ml-2 font-semibold">{recipe.title}</Text>
+          <Typography variant='sm' bold className=" ml-2 ">{recipe.title}</Typography>
           <View className="ml-2 mt-2 flex-row items-center opacity-60">
             <Feather name="clock" size={18} color="black" />
-            <Text className="ml-1  text-[14px]">{recipe.readyInMinutes} min</Text>
+            <Typography variant='xsm' className="ml-1 mt-[2px] ">{recipe.readyInMinutes} min</Typography>
             <Entypo name="dot-single" size={24} color="black" />
             <View className = "opacity-90 flex-row">
               <FontAwesome6 name="fire" size={17} color="black" />
-              <Text className = "ml-1 ">{calories} cal</Text>
+              <Typography variant='xsm' className = "ml-1 mt-[2px] ">{calories} cal</Typography>
             </View>
           </View>
         </View>

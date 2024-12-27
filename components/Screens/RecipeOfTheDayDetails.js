@@ -13,15 +13,17 @@ const RecipeOfTheDayDetails = () => {
     const [recipe,setRecipe] = useState({});
 
     const fetchRecipe = async () => {
-        if (!recipe) {
+        
           try {
             const response = await fetch(
-              `https://api.spoonacular.com/recipes/661758/information?apiKey=c1c7bf80fce74634ae18b9271af99c50`
+              "https://api.spoonacular.com/recipes/661758/information?includeNutrition=true&apiKey=c1c7bf80fce74634ae18b9271af99c50&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=true&fillIngredients=true"
             );
     
             // Check if response is okay
             if (response.ok) {
+            
               const data = await response.json();
+              
               setRecipe(data); // Update state with fetched recipe data
             } else {
               console.error('Failed to fetch recipe:', response.statusText);
@@ -29,12 +31,13 @@ const RecipeOfTheDayDetails = () => {
           } catch (error) {
             console.error('Error fetching recipe:', error);
           }
-        }
+        
       };
     
      
       useEffect(() => {
         fetchRecipe();
+        
       }, []);
 
    
@@ -60,13 +63,15 @@ const RecipeOfTheDayDetails = () => {
         sheetRef.current?.close();
     }, []);
 
-    const formattedInstructions = recipe.instructions?recipe.instructions
+    const formattedInstructions = recipe.instructions 
+  ? recipe.instructions
       .replace(/<\/?ol>/g, '')
       .replace(/<\/?li>/g, '')
       .split('.')
-  : recipe.analyzedInstructions.length
+  : recipe.analyzedInstructions?.length 
       ? recipe.analyzedInstructions[0].steps.map(step => step.step)
       : [];
+
 
     const truncateSummary = (summary, maxLength) => {
 

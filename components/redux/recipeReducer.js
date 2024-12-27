@@ -6,7 +6,9 @@ import {
   GET_TRENDING_RECIPES_ERROR,
   GET_TRENDING_RECIPES_SUCCESS,GET_RECOMMENDED_RECIPES,GET_RECOMMENDED_RECIPES_SUCCESS,GET_RECOMMENDED_RECIPES_ERROR,
   SET_SEARCH_QUERY,
-  SET_SEARCH_FOCUS
+  SET_SEARCH_FOCUS,
+  ADD_TO_FAVOURITES,
+  REMOVE_FROM_FAVOURITES
 } from "./action";
 
 const initialState = {
@@ -14,6 +16,7 @@ const initialState = {
   popularRecipes: [],
   trendingRecipes: [],
   recommendedRecipes:[],
+  favourites:[],
   error: null,
   searchFocus:false,
   searchQuery:""
@@ -63,6 +66,15 @@ export const recipeReducer = (state = initialState, action) => {
         return {...state , searchFocus: action.payload};
       case SET_SEARCH_QUERY:
         return {...state, searchQuery: action.payload};
+
+      //favourites
+
+
+      case ADD_TO_FAVOURITES:
+        return {...state, favourites:[...state.favourites, action.payload]};
+
+      case REMOVE_FROM_FAVOURITES:
+        return {...state, favourites: state.favourites.filter((recipe)=> recipe.id != action.payload.id)};
     default:
       return state;
   }

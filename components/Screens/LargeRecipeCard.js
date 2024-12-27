@@ -2,17 +2,19 @@ import { View, Text, TouchableOpacity,Image,Button } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import React from 'react'
 import EvilIcons from '@expo/vector-icons/EvilIcons';
+import { MaterialIcons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Typography from '../Typography/Typography';
 
 const truncateSummary = (summary, maxLength) => {
   if (summary.length <= maxLength) return summary;
   const text =  summary.slice(0, maxLength) + '...';
   return text.replace(/<[^>]*>?/gm, '');
 };
-const LargeRecipeCard = ({recipe}) => {
+const LargeRecipeCard = ({recipe,isFav}) => {
   const maxLength = 55;
   const truncatedSummary = truncateSummary(recipe.summary,maxLength)
   let calorieNutrient = recipe.nutrition.nutrients.find(nutrient => nutrient.name === "Calories");
@@ -29,11 +31,18 @@ const LargeRecipeCard = ({recipe}) => {
           shadowRadius: 5,           
           elevation: 5,              
         }}
-        onPress={() => {console.log(recipe.instructions); navigation.navigate('RecipeDetailsScreen', {recipe})}}
+        onPress={() => {
+          // console.log(recipe.instructions);
+           navigation.navigate('RecipeDetailsScreen', {recipe})}}
       >
         {/* heart icon  */}
-        <TouchableOpacity className="absolute top-3 left-3 z-10 opacity-90 items-center bg-white p-1 py-[5] rounded-full">
-            <EvilIcons name="heart" size={29} color="red" />
+        <TouchableOpacity className="absolute top-4 left-3 z-10 opacity-90 items-center bg-white p-2 py-[6] rounded-full">
+          {isFav == true?
+            <MaterialIcons name="favorite" size={24} color="#FF007A" />
+            :
+            <MaterialIcons name="favorite-border" size={24} color="red" />
+          }
+            
           </TouchableOpacity>
         {/* image container */}
         <View className = "w-[30%] h-full rounded-3xl items-center mr-11  justify-center ml-2">
@@ -41,16 +50,16 @@ const LargeRecipeCard = ({recipe}) => {
         </View>
         {/* details container  */}
         <View className = "w-[56%] h-full mt-2">
-            <Text className = "text-[17px] font-bold text-gray-900">{recipe.title}</Text>
-            <Text className = "text-[13px] font-medium opacity-60 mt-2 ">{truncatedSummary}</Text>
+            <Typography variant='normal' bold className = " text-gray-900">{recipe.title}</Typography>
+            <Typography variant='xsm' className = " opacity-60 mt-2 ">{truncatedSummary}</Typography>
             {/* time and calories */}
             <View className=" mt-2 flex-row items-center opacity-60">
             <Feather name="clock" size={17} color="black" />
-            <Text className="ml-1  text-[13px]">{recipe.readyInMinutes} min</Text>
+            <Typography variant='xsm' className="ml-1 mt-[2px]  ">{recipe.readyInMinutes} min</Typography>
             <Entypo name="dot-single" size={24} color="black" />
             <View className = "opacity-90 flex-row">
               <FontAwesome6 name="fire" size={16} color="black" />
-              <Text className = "ml-1 text-[13px] ">{calories} kcal</Text>
+              <Typography variant='xsm' className="ml-1 mt-[2px]  ">{calories} kcal</Typography>
             </View>
             </View>
             {/* try now btn

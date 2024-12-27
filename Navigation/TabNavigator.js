@@ -29,6 +29,7 @@ const TabNavigator = () => {
          
         },
         tabBarLabelStyle: {
+          fontFamily:"Poppins-SemiBold",
           fontSize: 14,
           paddingBottom: 10,
           marginTop: -10,
@@ -42,6 +43,7 @@ const TabNavigator = () => {
         name="Home" 
         component={HomeStackNavigator}
         options={{
+          
           tabBarIcon: ({ focused }) => (
             focused ? (
               <MaterialCommunityIcons name="home" size={26} color="#FC8019" />
@@ -51,7 +53,7 @@ const TabNavigator = () => {
           ),
         }}  
       />
-       <TabNav.Screen 
+       {/* <TabNav.Screen 
         name="Upload" 
         component={PostRecipeStackNavigator}
         options={{
@@ -63,7 +65,7 @@ const TabNavigator = () => {
             )
           ),
         }}
-      />
+      /> */}
       <TabNav.Screen 
         name="Favourites" 
         component={FavouritesStackNavigator}
@@ -77,7 +79,7 @@ const TabNavigator = () => {
           ),
         }}
       />
-      <TabNav.Screen 
+      {/* <TabNav.Screen 
         name="Profile" 
         component={ProfileStackNavigator}
         options={{
@@ -89,7 +91,7 @@ const TabNavigator = () => {
             )
           ),
         }}
-      /> 
+      />  */}
     </TabNav.Navigator>
   );
 }
