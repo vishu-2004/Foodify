@@ -109,6 +109,7 @@ const HomeScreen = () => {
   const searchFocus = useSelector((state) => state.recipeReducer.searchFocus);
   const searchQuery = useSelector((state) => state.recipeReducer.searchQuery);
   const favourites = useSelector((state)=> state.recipeReducer.favourites);
+ 
   
 
  
@@ -316,12 +317,13 @@ const HomeScreen = () => {
                 recipe = {recipe}
                 isFav = {isFavourite}
                 
+                
               />)
 
           })}
         </ScrollView>
         {/* popular Recipes */}
-        <Text className="ml-3 mt-3 mb-[7px]  text-xl font-semibold">Popular Recipes</Text>
+        <Typography variant='xl' bold className="ml-3 mt-3 mb-[7px]  ">Popular Recipes</Typography>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {popularRecipes.map(recipe => {
             const isFavourite = recipe.id && favourites?.some((favrecipe)=> favrecipe.id == recipe.id);
@@ -342,7 +344,7 @@ const HomeScreen = () => {
           })}
         </ScrollView>
         {/* trending recipes */}
-        <Text className="ml-3 mt-[10] mb-2 text-xl font-semibold">Trending Recipes</Text>
+        <Typography variant='xl' bold className="ml-3 mt-[10] mb-2 ">Trending Recipes</Typography>
         <ScrollView className="mb-1" horizontal showsHorizontalScrollIndicator={false}>
           {trendingRecipes.map(recipe => {
 

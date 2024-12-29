@@ -65,7 +65,7 @@ function* getTrendingRecipes() {
   
   if (result) {
     try {
-      console.log(result.data.recipes)
+      
       const trendingRecipes = result.data.recipes.filter(recipe => recipe.title.length <= 50);
       yield put(getTrendingRecipesSuccess(trendingRecipes));
     } catch (error) {
