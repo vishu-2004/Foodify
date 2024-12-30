@@ -23,14 +23,15 @@ const LargeRecipeCard = ({recipe,isFav}) => {
   let calories = calorieNutrient ? Math.round(calorieNutrient.amount) : 0;
   return (
     <View className="items-center mb-[-20]">
-      <TouchableOpacity className = "bg-white flex-row p-2 h-[160px] w-[95%] items-center rounded-3xl mt-8"
+      <TouchableOpacity className = "bg-white shadow-xl flex-row p-2 h-[160px] w-[95%] items-center rounded-3xl mt-8"
       style={{
           shadowColor: '#000',        
           shadowOffset: { width: 0, height: 3 },
           shadowOpacity: 0.5,        
           shadowRadius: 5,           
-          elevation: 5,              
+          elevation: 3,              
         }}
+        
         onPress={() => {
           // console.log(recipe.instructions);
            navigation.navigate('RecipeDetailsScreen', {recipe})}}

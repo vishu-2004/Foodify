@@ -10,6 +10,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { addToFavourites, removeFromFavourites } from '../redux/action';
 import { useDispatch, useSelector } from 'react-redux';
 import Typography from '../Typography/Typography';
+import Animated, { FadeInDown } from 'react-native-reanimated';
+
 
 const RecipeDetailsScreen = ({ route }) => {
 
@@ -100,7 +102,7 @@ const RecipeDetailsScreen = ({ route }) => {
     }
     return (
         <View style={styles.container}>
-            <StatusBar style="dark" />
+            <StatusBar style="light" />
 
             {/* Image display */}
             <TouchableOpacity className="absolute top-12 right-5 z-10 opacity-90 items-center bg-white p-3 py-[9] pt-3 rounded-full"
@@ -131,11 +133,11 @@ const RecipeDetailsScreen = ({ route }) => {
 
                 <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
                     {/* Recipe Title */}
-                    <Typography variant='xl' class='pr-2' bold>{recipe.title}</Typography>
+                    <Typography variant='xl' class='pr-2 mt-[-4]' bold>{recipe.title}</Typography>
                     <Typography variant='sm' className="opacity-70 mt-[8] mb-3">
                         {truncatedSummary}
                     </Typography>
-                    <View className="pt-4 ml-0 gap-x-1 h-auto w-[90%] flex-wrap flex-row items-center gap-y-4 justify-between">
+                    <View className="pt-4 ml-0 gap-x-1 h-auto w-[100%] flex-wrap flex-row items-center gap-y-4 justify-between">
                         <View className="w-[48%] mr-1 flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <FontAwesome6 name="wheat-awn" size={21} color="black" />
@@ -148,7 +150,7 @@ const RecipeDetailsScreen = ({ route }) => {
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <MaterialCommunityIcons name="egg-fried" size={29} color="black" />
                             </View>
-                            <Typography variant='sm' className="ml-2 opacity-70 ">{Math.round(recipe.nutrition.nutrients[11].amount)} gm Carbs</Typography>
+                            <Typography variant='sm' className="ml-2 opacity-70 ">{Math.round(recipe.nutrition.nutrients[11].amount)} gm Protein</Typography>
                         </View>
                         <View className="w-[48%] flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
@@ -212,8 +214,11 @@ const RecipeDetailsScreen = ({ route }) => {
                     {/* Ingredients list */}
                     {activeTab === "Ingredients" &&
                         <View className="mt-5 mx-1">
-                            {extendedIngredients.map((ingredient) => (
-                                <View key={ingredient.id} style={styles.ingredientContainer}>
+                            {extendedIngredients.map((ingredient,index) => (
+                                <Animated.View entering={FadeInDown.springify()
+                                    .damping(17)
+                                    .mass(0.9)
+                                    .delay(index*100)} key={ingredient.id} style={styles.ingredientContainer}>
                                     {/* Ingredient Image */}
                                     <Image
                                         source={{ uri: `https://spoonacular.com/cdn/ingredients_100x100/${ingredient.image}` }}
@@ -226,7 +231,7 @@ const RecipeDetailsScreen = ({ route }) => {
                                             {Math.round(ingredient.measures.metric.amount)} {ingredient.measures.metric.unitLong}
                                         </Typography>
                                     </View>
-                                </View>
+                                </Animated.View>
                             ))}
                         </View>
 
@@ -236,9 +241,16 @@ const RecipeDetailsScreen = ({ route }) => {
           <View className="mt-5 mx-1">
             <Typography variant='xl' class='text-center mb-4' bold>Instructions</Typography>
             {formattedInstructions.map((instruction, index) => (
+                <Animated.View entering={FadeInDown.springify()
+                    .damping(17)
+                    .mass(0.9)
+                    .delay(index*100)}
+                    key={index}
+                    >
               <Typography key={index} variant='normal' class='opacity-70 mb-1'>
                 {index + 1}. {instruction.trim()}
               </Typography>
+              </Animated.View>
             ))}
           </View>
         }
@@ -253,12 +265,12 @@ const styles = StyleSheet.create({
     imageContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: -78,
+        marginTop: -110,
     },
     image: {
-        height: '55%',
-        width: '97%',
-        borderRadius: 10,
+        height: '58.9%',
+        width: '100%',
+        
     },
     contentContainer: {
         backgroundColor: 'white',

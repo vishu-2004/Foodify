@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
+import Typography from '../Typography/Typography';
 
 const SplashScreen = () => {
   const ring1padding = useSharedValue(0);
@@ -47,8 +48,8 @@ const SplashScreen = () => {
         </Animated.View>
       </Animated.View>
       <View style={styles.textContainer}>
-        <Text style={styles.text}>TasteBuds</Text>
-        <Text style={{ fontSize: 22, color: "white", fontWeight: "500" }}>DIY Cooking!</Text>
+        <Typography  bold className="text-white pt-10 text-[39px]">TasteBuds</Typography>
+        <Typography  bold class='text-white text-[20px]'>DIY Cooking!</Typography>
       </View>
     </View>
   );
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: "center",
     backgroundColor: "#FC8019",
-    paddingTop: 30,
+    paddingTop: 40,
   },
   OuterCircle: {
     borderRadius: 180,
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   innerCircle: {
-    borderRadius: 160,
+    borderRadius: 190,
     backgroundColor: 'rgba(255, 255, 255, 0.6)',
     opacity: 1,
     justifyContent: 'center',
@@ -86,11 +87,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {
-    fontSize: 37,
-    color: "white",
-    fontWeight: "800",
-  }
+  
 });
 
 export default SplashScreen;

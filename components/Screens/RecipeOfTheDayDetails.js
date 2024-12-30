@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
 import React, { useRef, useMemo, useCallback, useState,useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
@@ -6,42 +6,30 @@ import EvilIcons from '@expo/vector-icons/EvilIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { MaterialIcons } from '@expo/vector-icons';
+import { addToFavourites, removeFromFavourites } from '../redux/action';
+import { useDispatch, useSelector } from 'react-redux';
+import Typography from '../Typography/Typography';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
-const RecipeOfTheDayDetails = () => {
+const RecipeOfTheDayDetails = ({ route }) => {
 
     const [activeTab, setActiveTab] = useState('Ingredients');
-    const [recipe,setRecipe] = useState({});
+    const { recipe, isFav } = route.params;
+    const { extendedIngredients } = recipe;
+    const [isFavourite, setIsFavourite] = useState(true);
+    const favourites = useSelector((state)=>state.recipeReducer.favourites)
 
-    const fetchRecipe = async () => {
-        
-          try {
-            const response = await fetch(
-              "https://api.spoonacular.com/recipes/661758/information?includeNutrition=true&apiKey=c1c7bf80fce74634ae18b9271af99c50&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=true&fillIngredients=true"
-            );
+    useEffect(()=>{
+        console.log(recipe);
+    },[])
     
-            // Check if response is okay
-            if (response.ok) {
-            
-              const data = await response.json();
-              
-              setRecipe(data); // Update state with fetched recipe data
-            } else {
-              console.error('Failed to fetch recipe:', response.statusText);
-            }
-          } catch (error) {
-            console.error('Error fetching recipe:', error);
-          }
-        
-      };
-    
-     
-      useEffect(() => {
-        fetchRecipe();
-        
-      }, []);
+    useEffect(() => {
+        setIsFavourite(recipe.id && favourites?.some((favrecipe) => favrecipe.id === recipe.id));
+    }, [recipe, favourites]);
 
    
-
+   
     // Correct use of ref with useRef()
     const sheetRef = useRef(null);
 
@@ -63,15 +51,11 @@ const RecipeOfTheDayDetails = () => {
         sheetRef.current?.close();
     }, []);
 
-    const formattedInstructions = recipe.instructions 
-  ? recipe.instructions
+    const formattedInstructions = recipe.instructions
       .replace(/<\/?ol>/g, '')
       .replace(/<\/?li>/g, '')
       .split('.')
-  : recipe.analyzedInstructions?.length 
-      ? recipe.analyzedInstructions[0].steps.map(step => step.step)
-      : [];
-
+  
 
     const truncateSummary = (summary, maxLength) => {
 
@@ -107,66 +91,86 @@ const RecipeOfTheDayDetails = () => {
 
     const maxLength = 190;
     const truncatedSummary = truncateSummary(recipe.summary, maxLength)
+    const dispatch = useDispatch();
 
+    const handleAddToFav = (recipe)=>{
+        dispatch(addToFavourites(recipe));
+        console.log(favourites.length);
+    }
+    const handleRemoveFromFav = (recipe)=>{
+        dispatch(removeFromFavourites(recipe));
+        console.log(favourites.length);
+    }
     return (
         <View style={styles.container}>
-            <StatusBar style="dark" />
+            <StatusBar style="light" />
 
             {/* Image display */}
-            <TouchableOpacity className="absolute top-12 right-5 z-10 opacity-90 items-center bg-white p-2 py-[9] rounded-full">
-                <EvilIcons name="heart" size={32} color="red" />
+            <TouchableOpacity className="absolute top-12 right-5 z-10 opacity-90 items-center bg-white p-3 py-[9] pt-3 rounded-full"
+                
+            >
+                {isFav && isFavourite?
+                <Pressable onPress={()=>handleRemoveFromFav(recipe)}>
+            <MaterialIcons name="favorite" size={29} color="#FF007A" />
+            </Pressable>
+            :
+            <Pressable onPress={()=>handleAddToFav(recipe)}>
+            <MaterialIcons name="favorite-border" size={29} color="red" />
+            </Pressable>
+                }
+                
             </TouchableOpacity>
             <View style={styles.imageContainer}>
-                <Image source={{ uri: recipe.image }} style={styles.image} />
+                <Image source={require('./pancake.jpg')} style={styles.image} />
             </View>
 
             {/* Bottom sheet display */}
             <BottomSheet
                 ref={sheetRef}
-                index={1} // Initially show the bottom sheet at index 1 (50%)
+                index={0} // Initially show the bottom sheet at index 1 (50%)
                 snapPoints={snapPoints}
                 onChange={handleSheetChange}
             >
 
                 <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
                     {/* Recipe Title */}
-                    <Text style={styles.title}>{recipe.title}</Text>
-                    <Text style={styles.description} className="opacity-70 mt-[-3]">
+                    <Typography variant='xl' class='pr-2  mt-[-4]' bold>{recipe.title}</Typography>
+                    <Typography variant='sm' className="opacity-70 mt-[8] mb-3">
                         {truncatedSummary}
-                    </Text>
-                    <View className="pt-4 ml-0 gap-x-1 h-auto w-[90%] flex-wrap flex-row items-center gap-y-4 justify-between">
+                    </Typography>
+                    <View className="pt-4 ml-0 gap-x-1 h-auto w-[100%] flex-wrap flex-row items-center gap-y-4 justify-between">
                         <View className="w-[48%] mr-1 flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <FontAwesome6 name="wheat-awn" size={21} color="black" />
 
                             </View>
-                            <Text className="ml-3 font-medium text-[15px]">{Math.round(recipe.nutrition.nutrients[4].amount)} gm Carbs</Text>
+                            <Typography variant='sm' className="ml-2 opacity-70  ">{Math.round(recipe.nutrition.nutrients[4].amount)} gm Carbs</Typography>
 
                         </View>
                         <View className="w-[48%] flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <MaterialCommunityIcons name="egg-fried" size={29} color="black" />
                             </View>
-                            <Text className="ml-3 font-medium text-[15px]">{Math.round(recipe.nutrition.nutrients[11].amount)} gm Carbs</Text>
+                            <Typography variant='sm' className="ml-2 opacity-70 ">{Math.round(recipe.nutrition.nutrients[11].amount)} gm Protein</Typography>
                         </View>
                         <View className="w-[48%] flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <FontAwesome5 name="pizza-slice" size={22} color="black" />
                             </View>
-                            <Text className="ml-3 font-medium text-[15px]">{Math.round(recipe.nutrition.nutrients[2].amount)} gm Fat</Text>
+                            <Typography variant='sm' className="ml-2 opacity-70 ">{Math.round(recipe.nutrition.nutrients[2].amount)} gm Fat</Typography>
                         </View>
                         <View className="w-[48%] flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <FontAwesome6 name="fire" size={21} color="black" />
                             </View>
-                            <Text className="ml-3 font-medium text-[15px]">{Math.round(recipe.nutrition.nutrients[0].amount)} kcal</Text>
+                            <Typography variant='sm' className="ml-2 opacity-70 ">{Math.round(recipe.nutrition.nutrients[0].amount)} kcal</Typography>
                         </View>
                     </View>
 
                     {/* SWITCH BETWEEN Ingredients AND instructions */}
 
 
-                    <View style={styles.tabSwitchContainer} className="bg-slate-100 mt-5 items-center ml-1  h-[57] w-[97%]  justify-between flex-row  rounded-xl">
+                    <View style={styles.tabSwitchContainer} className="bg-slate-100 mt-4 items-center   h-[57] w-[98%]  justify-between flex-row  rounded-xl">
                         <TouchableOpacity
                             style={[
                                 styles.tabButton,
@@ -175,15 +179,15 @@ const RecipeOfTheDayDetails = () => {
                             className=" h-[87%] items-center justify-center w-[49%] bg-white rounded-xl "
                             onPress={() => setActiveTab('Ingredients')}
                         >
-                            <Text
+                            <Typography
                                 style={[
                                     styles.tabButtonText,
                                     styles === 'Ingredients' && styles.activeTabButtonText
                                 ]}
-                                className="text-[16px] font-medium"
+                                variant='sm' bold
                             >
                                 Ingredients
-                            </Text>
+                            </Typography>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -194,15 +198,16 @@ const RecipeOfTheDayDetails = () => {
                             className=" h-[90%] w-[49%] items-center justify-center bg-white rounded-xl"
                             onPress={() => setActiveTab('Instructions')}
                         >
-                            <Text
+                            <Typography
                                 style={[
                                     styles.tabButtonText,
                                     activeTab === 'Instructions' && styles.activeTabButtonText
                                 ]}
-                                className="text-[16px] font-medium"
+                                variant='sm' bold
+                               
                             >
                                 Instructions
-                            </Text>
+                            </Typography>
                         </TouchableOpacity>
                     </View>
 
@@ -210,8 +215,11 @@ const RecipeOfTheDayDetails = () => {
                     {/* Ingredients list */}
                     {activeTab === "Ingredients" &&
                         <View className="mt-5 mx-1">
-                            {extendedIngredients.map((ingredient) => (
-                                <View key={ingredient.id} style={styles.ingredientContainer}>
+                            {extendedIngredients.map((ingredient,index) => (
+                                <Animated.View entering={FadeInDown.springify()
+                                    .damping(17)
+                                    .mass(0.9)
+                                    .delay(index*100)} key={ingredient.id} style={styles.ingredientContainer}>
                                     {/* Ingredient Image */}
                                     <Image
                                         source={{ uri: `https://spoonacular.com/cdn/ingredients_100x100/${ingredient.image}` }}
@@ -219,12 +227,12 @@ const RecipeOfTheDayDetails = () => {
                                     />
                                     {/* Ingredient Name and Metric Measure */}
                                     <View style={styles.ingredientInfo}>
-                                        <Text style={styles.ingredientName}>{ingredient.name}</Text>
-                                        <Text style={styles.ingredientMeasure}>
+                                        <Typography variant='sm' bold class='mb-1'>{ingredient.name}</Typography>
+                                        <Typography variant='xsm'>
                                             {Math.round(ingredient.measures.metric.amount)} {ingredient.measures.metric.unitLong}
-                                        </Text>
+                                        </Typography>
                                     </View>
-                                </View>
+                                </Animated.View>
                             ))}
                         </View>
 
@@ -232,11 +240,18 @@ const RecipeOfTheDayDetails = () => {
                      {/* Instructions */}
         {activeTab === "Instructions" &&
           <View className="mt-5 mx-1">
-            <Text style={styles.heading}>Instructions</Text>
+            <Typography variant='xl' class='text-center mb-4' bold>Instructions</Typography>
             {formattedInstructions.map((instruction, index) => (
-              <Text key={index} style={styles.instructionText}>
+                <Animated.View entering={FadeInDown.springify()
+                    .damping(17)
+                    .mass(0.9)
+                    .delay(index*100)}
+                    key={index}
+                    >
+              <Typography key={index} variant='normal' class='opacity-70 mb-1'>
                 {index + 1}. {instruction.trim()}
-              </Text>
+              </Typography>
+              </Animated.View>
             ))}
           </View>
         }
@@ -251,12 +266,12 @@ const styles = StyleSheet.create({
     imageContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: -78,
+        marginTop: -110,
     },
     image: {
-        height: '55%',
-        width: '97%',
-        borderRadius: 10,
+        height: '58.9%',
+        width: '100%',
+        
     },
     contentContainer: {
         backgroundColor: 'white',
