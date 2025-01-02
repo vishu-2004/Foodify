@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import LargeRecipeCard from './LargeRecipeCard';
+import LargeRecipeCard from '../components/LargeRecipeCard';
 
 const PostRecipe = () => {
   return (

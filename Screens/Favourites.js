@@ -2,7 +2,7 @@ import { View, Text, ScrollView } from 'react-native'
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import LargeRecipeCard from './LargeRecipeCard';
+import LargeRecipeCard from '../components/LargeRecipeCard';
 
 const Favourites = () => {
   const favourites = useSelector((state)=>state.recipeReducer.favourites)

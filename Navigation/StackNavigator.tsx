@@ -1,20 +1,35 @@
 import React from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "../components/Screens/HomeScreen";
-import SplashScreen from "../components/Screens/SplashScreen";
+import HomeScreen from "../Screens/HomeScreen";
+import SplashScreen from "../Screens/SplashScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Favourites from "../components/Screens/Favourites";
-import PostRecipe from "../components/Screens/PostRecipe";
-import ProfileScreen from "../components/Screens/ProfileScreen";
-import SearchScreen from "../components/Screens/SearchScreen";
-import RecipeDetailsScreen from "../components/Screens/RecipeDetailsScreen";
-import RecipeOfTheDayDetails from "../components/Screens/RecipeOfTheDayDetails";
+import Favourites from "../Screens/Favourites";
+import PostRecipe from "../Screens/PostRecipe";
+import ProfileScreen from "../Screens/ProfileScreen";
+import SearchScreen from "../Screens/SearchScreen";
+import RecipeDetailsScreen from "../components/RecipeDetailsScreen";
+import RecipeOfTheDayDetails from "../Screens/RecipeOfTheDayDetails";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
+import OptionPage from "../authScreens/OptionPage";
+import LoginPage from "../authScreens/LoginPage";
+import SignUpPage from "../authScreens/SignUpPage";
 
 const Stack = createStackNavigator();
 
 const SharedStack = createSharedElementStackNavigator();
+
+const AuthStackNavigator = ()=>{
+  return(
+  <Stack.Navigator initialRouteName="OptionPage" screenOptions={{headerShown:false}}>
+    <Stack.Screen name="OptionPage" component={OptionPage}/>
+    <Stack.Screen name="LogInPage" component={LoginPage}/>
+    <Stack.Screen name="SignUpPage" component={SignUpPage}/>
+  </Stack.Navigator>
+     
+   
+  )
+}
 
 const HomeStackNavigator = ()=>{
   return(
@@ -57,4 +72,4 @@ const ProfileStackNavigator = () =>{
 
 
 
-export {HomeStackNavigator,PostRecipeStackNavigator,ProfileStackNavigator,FavouritesStackNavigator};
+export {HomeStackNavigator,PostRecipeStackNavigator,ProfileStackNavigator,FavouritesStackNavigator,AuthStackNavigator};

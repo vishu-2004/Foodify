@@ -6,7 +6,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
-import Typography from '../Typography/Typography';
+import Typography from './Typography/Typography';
 
 const RecipeCard = ({recipe,isFav}) => {
   let calorieNutrient = recipe.nutrition.nutrients.find(nutrient => nutrient.name === "Calories");

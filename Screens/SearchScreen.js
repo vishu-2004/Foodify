@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
-import RecipeCard from "./RecipeCard";
+import Header from "../components/Header";
+import RecipeCard from "../components/RecipeCard";
 import { useSelector, useDispatch } from "react-redux";
-import SearchRecipeCard from "./SearchRecipeCard";
+import SearchRecipeCard from "../components/SearchRecipeCard";
 import axios from "axios";
 import _ from "lodash";
 import { SharedElement } from "react-navigation-shared-element";
-import Typography from "../Typography/Typography";
+import Typography from "../components/Typography/Typography";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,

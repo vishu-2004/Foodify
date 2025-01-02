@@ -9,7 +9,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { MaterialIcons } from '@expo/vector-icons';
 import { addToFavourites, removeFromFavourites } from '../redux/action';
 import { useDispatch, useSelector } from 'react-redux';
-import Typography from '../Typography/Typography';
+import Typography from '../components/Typography/Typography';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 const RecipeOfTheDayDetails = ({ route }) => {
@@ -121,7 +121,7 @@ const RecipeOfTheDayDetails = ({ route }) => {
                 
             </TouchableOpacity>
             <View style={styles.imageContainer}>
-                <Image source={require('./pancake.jpg')} style={styles.image} />
+                <Image source={require('../assets/pancake.jpg')} style={styles.image} />
             </View>
 
             {/* Bottom sheet display */}

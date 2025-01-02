@@ -6,7 +6,7 @@ import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';
-import Typography from '../Typography/Typography';
+import Typography from './Typography/Typography';
 
 const SearchRecipeCard = ({recipe}) => {
   let calorieNutrient = recipe?.nutrition?.nutrients?.find((nutrient) => nutrient.name === "Calories");

@@ -8,11 +8,11 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native";
-import TopNavBar from "./Header";
+import TopNavBar from "../components/Header";
 import { StatusBar } from "expo-status-bar";
 import { ScrollView } from "react-native";
-import Header from "./Header";
-import RecipeCard from "./RecipeCard";
+import Header from "../components/Header";
+import RecipeCard from "../components/RecipeCard";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getPopularRecipes,
@@ -25,13 +25,13 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Entypo from "@expo/vector-icons/Entypo";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import axios from "axios";
-import LargeRecipeCard from "./LargeRecipeCard";
+import LargeRecipeCard from "../components/LargeRecipeCard";
 import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import SearchScreen from "./SearchScreen";
 import { SharedElement } from "react-navigation-shared-element";
 import { MaterialIcons } from "@expo/vector-icons";
-import Typography from "../Typography/Typography";
+import Typography from "../components/Typography/Typography";
 import Animated, { BounceInDown, FadeInDown, FadeInRight, SlideInDown, SlideInLeft, SlideInRight } from "react-native-reanimated";
 
 // import Config from "react-native-config";
@@ -238,7 +238,9 @@ const HomeScreen = () => {
                   <Animated.View entering={FadeInRight.springify()
                           .damping(17)
                           .mass(0.9)
-                          .delay(index*100)}>
+                          .delay(index*100)}
+                          key={index}
+                          >
                     <TouchableOpacity
                       className="flex flex-row mx-[3px] my-2"
                       onPress={() => handleCatSelect(cat.name)}
@@ -287,7 +289,9 @@ const HomeScreen = () => {
                         entering={SlideInDown.springify()
                           .damping(17)
                           .mass(0.9)
-                          .delay(index * 100)}
+                          .delay(index * 100)
+                        
+                        }
                       >
                         <LargeRecipeCard
                           key={recipe.id}
@@ -310,7 +314,7 @@ const HomeScreen = () => {
               <Animated.View entering={SlideInLeft.springify()
                           .damping(17)
                           .mass(0.9)
-                          .delay(200)} className="items-center mb-7">
+                          .delay(150)} className="items-center mb-7">
                 <TouchableOpacity
                   className="bg-white flex-row p-2 h-[160px] w-[95%] items-center rounded-3xl mt-8"
                   style={{
@@ -338,7 +342,7 @@ const HomeScreen = () => {
                   <View className="w-[30%] h-full rounded-3xl items-center mr-11  justify-center ml-[10px]">
                     <Image
                       className="h-[140] w-[150] ml-6 object-cover  rounded-3xl"
-                      source={require("./pancake.jpg")}
+                      source={require("../assets/pancake.jpg")}
                     />
                   </View>
                   {/* details container  */}
@@ -412,6 +416,7 @@ const HomeScreen = () => {
                       .mass(0.9)
                       .delay(index * 100)
                     }
+                    key={recipe.id}
                     >
                     <RecipeCard
                       key={recipe.id}
@@ -485,6 +490,7 @@ const HomeScreen = () => {
                       .mass(0.9)
                       .delay(index * 100)
                     }
+                    key={recipe.id}
                     >
                     
                     <RecipeCard

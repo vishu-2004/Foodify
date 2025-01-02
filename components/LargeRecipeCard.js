@@ -7,7 +7,7 @@ import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import Typography from '../Typography/Typography';
+import Typography from './Typography/Typography';
 
 const truncateSummary = (summary, maxLength) => {
   if (summary.length <= maxLength) return summary;

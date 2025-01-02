@@ -9,7 +9,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { MaterialIcons } from '@expo/vector-icons';
 import { addToFavourites, removeFromFavourites } from '../redux/action';
 import { useDispatch, useSelector } from 'react-redux';
-import Typography from '../Typography/Typography';
+import Typography from './Typography/Typography';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 

@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
-import Typography from '../Typography/Typography';
+import Typography from '../components/Typography/Typography';
 
 const SplashScreen = () => {
   const ring1padding = useSharedValue(0);
@@ -44,11 +44,11 @@ const SplashScreen = () => {
       <StatusBar style='light' />
       <Animated.View style={[styles.OuterCircle, outerCircleStyle]}>
         <Animated.View style={[styles.innerCircle, innerCircleStyle]}>
-          <Image style={styles.image} source={require('../../assets/Bowl.png')} />
+          <Image style={styles.image} source={require('../assets/Bowl.png')} />
         </Animated.View>
       </Animated.View>
       <View style={styles.textContainer}>
-        <Typography  bold className="text-white pt-10 text-[39px]">TasteBuds</Typography>
+        <Typography  bold className="text-white pt-10 text-[39px]">Foodify</Typography>
         <Typography  bold class='text-white text-[20px]'>DIY Cooking!</Typography>
       </View>
     </View>
