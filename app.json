@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "TasteBuds",
-    "slug": "TasteBuds",
+    "name": "Foodify",
+    "slug": "Foodify",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,7 +16,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#F1F0EB"
       }
     },
@@ -29,7 +29,8 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
-      ]
+      ],
+      "expo-secure-store"
     ]
   }
 }

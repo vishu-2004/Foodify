@@ -1,14 +1,58 @@
-import { View, Text, Image, TextInput, Pressable } from "react-native";
-import React, { useState } from "react";
+import { View, Text, Image, TextInput, Pressable,ActivityIndicator } from "react-native";
+import React, { useState ,useContext} from "react";
 import Typography from "../components/Typography/Typography";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { supabase } from "../lib/supabase";
+import { ModalContext } from "../Contexts/modalContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+  const [loading,setLoading] = useState(false);
+  const modalCtx = useContext(ModalContext);
+
+  const handleSignIn = async () => {
+    if (!email || !password ) {
+      modalCtx.openModal(
+        "Incomplete",
+        "Please fill out all fields to continue.",
+        "OK"
+      );
+      return;
+    }
+
+   
+
+    setLoading(true);
+
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (authError) {
+      modalCtx.openModal("Error", authError.message, "OK");
+      setLoading(false);
+      return;
+    }
+
+    
+
+  
+    else {
+      modalCtx.openModal("Success", "Logged In successfully!", "OK");
+      
+      setEmail("");
+      setPassword("");
+     
+      navigation.navigate("MainApp");
+    }
+
+    setLoading(false);
+  };
   return (
     <View className="flex-1 bg-[#c1dce5] ">
       <Image
@@ -38,6 +82,7 @@ const LoginPage = () => {
 
             <View className="mt-4">
               <TextInput
+                value={email}
                 placeholder="Email"
                 className="border-black text-base font-Poppins pt-1 pl-4 border rounded-3xl h-[50px] w-[320px]"
                 onChangeText={(text) => setEmail(text)}
@@ -45,6 +90,7 @@ const LoginPage = () => {
               />
 
               <TextInput
+                value={password}
                 placeholder="Password"
                 className="border-black mt-3 text-base font-Poppins pt-1 pl-4 border rounded-3xl h-[50px] w-[320px] "
                 secureTextEntry
@@ -52,26 +98,44 @@ const LoginPage = () => {
                 onChangeText={(text) => setPassword(text)}
               />
               <TouchableOpacity>
-                <Typography
-                  
-                  class="text-center text-[13px] underline mt-2 mr-[149]"
-                >
+                <Typography class="text-center text-[13px] underline mt-2 mr-[149]">
                   Forget your password?
                 </Typography>
               </TouchableOpacity>
             </View>
-            <Pressable className="bg-primaryOrange  mt-7 rounded-3xl w-[320px] justify-center h-[50px]">
-              <Typography variant="normal" bold class="text-white text-center">
-                Log In
-              </Typography>
+            <Pressable 
+              onPress={() => {
+                handleSignIn();
+              }}
+              disabled={loading}
+            className="bg-primaryOrange  mt-7 rounded-3xl w-[320px] justify-center h-[50px]">
+              
+              {loading ? (
+                <ActivityIndicator size="small" color="#fff" /> 
+              ) : (
+                <Typography
+                  variant="normal"
+                  bold
+                  class="text-white text-center"
+                >
+                  Log In
+                </Typography>
+              )}
+              
             </Pressable>
-            <TouchableOpacity onPress={()=>{navigation.navigate("SignUpPage")}}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("SignUpPage");
+              }}
+            >
               <Typography class="text-[13px] mt-2 text-center">
                 Don't have an account?
                 <Typography
                   bold
                   class="text-[13px]   text-primaryOrange underline"
-                > Sign Up
+                >
+                  {" "}
+                  Sign Up
                 </Typography>
               </Typography>
             </TouchableOpacity>
