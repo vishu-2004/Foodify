@@ -16,6 +16,7 @@ import { useEffect, useCallback } from "react";
 import { AuthStackNavigator } from "./Navigation/StackNavigator";
 import { ModalProvider } from "./Contexts/modalContext";
 import Modal from "./components/Modals";
+import AuthProvider from "./Contexts/AuthContext";
 
 SplashScreen.preventAutoHideAsync(); // Prevent the splash screen from auto-hiding
 
@@ -48,24 +49,26 @@ export default function App() {
   }
 
   return (
-    <Provider store={store}>
-      <ModalProvider>
-        <NavigationContainer onReady={onLayoutRootView}>
-          <EntryStack.Navigator
-            initialRouteName="Auth"
-            screenOptions={{ headerShown: false }}
-          >
-            <EntryStack.Screen
-              name="Splash"
-              component={SplashScreenComponent}
-            />
-            <EntryStack.Screen name="Auth" component={AuthStackNavigator} />
-            <EntryStack.Screen name="MainApp" component={TabNavigator} />
-          </EntryStack.Navigator>
-          <Modal/>
-        </NavigationContainer>
-      </ModalProvider>
-    </Provider>
+    <AuthProvider>
+      <Provider store={store}>
+        <ModalProvider>
+          <NavigationContainer onReady={onLayoutRootView}>
+            <EntryStack.Navigator
+              initialRouteName="Splash"
+              screenOptions={{ headerShown: false }}
+            >
+              <EntryStack.Screen
+                name="Splash"
+                component={SplashScreenComponent}
+              />
+              <EntryStack.Screen name="Auth" component={AuthStackNavigator} />
+              <EntryStack.Screen name="MainApp" component={TabNavigator} />
+            </EntryStack.Navigator>
+            <Modal />
+          </NavigationContainer>
+        </ModalProvider>
+      </Provider>
+    </AuthProvider>
   );
 }
 

@@ -3,9 +3,13 @@ import { FavouritesStackNavigator, HomeStackNavigator, PostRecipeStackNavigator,
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
+
+
 const TabNav = createBottomTabNavigator();
 
 const TabNavigator = () => {
+ 
+
   return (
     <TabNav.Navigator
       screenOptions={{
@@ -79,7 +83,7 @@ const TabNavigator = () => {
           ),
         }}
       />
-      {/* <TabNav.Screen 
+      <TabNav.Screen 
         name="Profile" 
         component={ProfileStackNavigator}
         options={{
@@ -91,7 +95,7 @@ const TabNavigator = () => {
             )
           ),
         }}
-      />  */}
+      /> 
     </TabNav.Navigator>
   );
 }
