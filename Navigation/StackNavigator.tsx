@@ -42,7 +42,8 @@ const HomeStackNavigator = ()=>{
           return ['header']; 
         }}
       />
-    <SharedStack.Screen name="RecipeDetailsScreen" component={RecipeDetailsScreen}/>
+    <SharedStack.Screen name="RecipeDetailsScreen" 
+         component={RecipeDetailsScreen}/>
     <SharedStack.Screen name="RecipeOfTheDayDetails" component={RecipeOfTheDayDetails}/>
     </SharedStack.Navigator>
   );

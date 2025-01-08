@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native";
-import TopNavBar from "../components/Header";
+
 import { StatusBar } from "expo-status-bar";
 import { ScrollView } from "react-native";
 import Header from "../components/Header";
@@ -19,7 +19,7 @@ import {
   getTrendingRecipes,
   getRecommendedRecipes,
 } from "../redux/action";
-import EvilIcons from "@expo/vector-icons/EvilIcons";
+
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -27,17 +27,17 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import axios from "axios";
 import LargeRecipeCard from "../components/LargeRecipeCard";
 import { useNavigation } from "@react-navigation/native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import SearchScreen from "./SearchScreen";
-import { SharedElement } from "react-navigation-shared-element";
+
 import { MaterialIcons } from "@expo/vector-icons";
 import Typography from "../components/Typography/Typography";
-import Animated, { BounceInDown, FadeInDown, FadeInRight, SlideInDown, SlideInLeft, SlideInRight } from "react-native-reanimated";
+import Animated, {
+  FadeInRight,
+  SlideInDown,
+  SlideInLeft,
+  SlideInRight,
+} from "react-native-reanimated";
+import { useAuth } from "../Contexts/AuthContext";
 
-// import Config from "react-native-config";
-
-// Config.API_KEY;
-// const API_KEY="048a4f611f2e4d75bce953d398fbcbfd"
 const apiKeys = [
   "bb8a1024d4894906bfe4dc3b91ac778d", //vaib
   "0dacc6ea58bc46e993d43830d1a83860",
@@ -53,7 +53,6 @@ const findWorkingApiKey = async (baseUrl) => {
       const response = await axios.get(url);
       const data = response.data;
 
-      // Check for valid response
       if (!data.error && data.code !== 402) {
         return { apiKey, url, data };
       }
@@ -63,13 +62,24 @@ const findWorkingApiKey = async (baseUrl) => {
   }
 };
 
-const apiKey = "xxxxxxxxx";
 const HomeScreen = () => {
+  const [favList, setFavList] = useState([]);
+  const { profile } = useAuth();
   useEffect(() => {
     dispatch(getPopularRecipes());
     dispatch(getTrendingRecipes());
     dispatch(getRecommendedRecipes());
   }, []);
+
+  useEffect(() => {
+    setisLoading(true);
+    console.log("fav =>", profile.favourite_recipes.length);
+    const currentFavIds =
+      profile?.favourite_recipes?.map((obj) => obj.id) || [];
+    setFavList(currentFavIds);
+
+    setisLoading(false);
+  }, [profile]);
 
   useEffect(() => {
     const fetchRecipeData = async () => {
@@ -78,23 +88,21 @@ const HomeScreen = () => {
           "https://api.spoonacular.com/recipes/661758/information?includeNutrition=true&apiKey=c1c7bf80fce74634ae18b9271af99c50&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=true&fillIngredients=true";
         setisLoading(true);
 
-        // Use fetch to retrieve data from the URL
         const res = await findWorkingApiKey(recipeURL);
-        console.log(res.data)
-        setRecipeOfDay(res.data);
 
-       
+        setRecipeOfDay(res.data);
       } catch (error) {
-        console.error(error); // Handle any errors
+        console.error(error);
       } finally {
-        setisLoading(false); // Ensure loading state is reset
+        setisLoading(false);
       }
     };
 
-    fetchRecipeData(); // Call the async function
+    fetchRecipeData();
   }, []);
 
   const navigation = useNavigation();
+
   const categories = [
     {
       id: 1,
@@ -210,10 +218,10 @@ const HomeScreen = () => {
       {!searchFocus && (
         <ScrollView>
           <View className="">
-            <Typography variant="normal" class="mt-2  ml-3 ">
-              Hello, Vishal! 👋
+            <Typography variant="normal" class="mt-3  ml-3 ">
+              Hello, {profile.name}! 👋
             </Typography>
-            <Text className="mt-3 ml-3 text-[28px]  font-PoppinsSemiBold  font-medium tracking-wide">
+            <Text className="mt-2 ml-3 text-[28px]  font-PoppinsSemiBold  font-medium tracking-wide">
               Ready to <Text className="text-[#FC8019] font-bold">Cook</Text>{" "}
               something
             </Text>
@@ -235,12 +243,12 @@ const HomeScreen = () => {
                 : "bg-orange-100";
               return (
                 <SafeAreaView key={index}>
-                  <Animated.View entering={FadeInRight.springify()
-                          .damping(17)
-                          .mass(0.9)
-                          .delay(index*100)}
-                          key={index}
-                          >
+                  <Animated.View
+                    entering={FadeInRight.springify()
+                      .damping(17)
+                      .mass(0.9)
+                      .delay(index * 100)}
+                  >
                     <TouchableOpacity
                       className="flex flex-row mx-[3px] my-2"
                       onPress={() => handleCatSelect(cat.name)}
@@ -278,10 +286,7 @@ const HomeScreen = () => {
                 <View className="flex-1 mt-[-18] h-max pb-12">
                   {catRecipes.map((recipe, index) => {
                     const isFavourite =
-                      recipe.id &&
-                      favourites?.some(
-                        (favrecipe) => favrecipe.id == recipe.id
-                      );
+                      recipe.id && favList?.includes(recipe.id);
 
                     return (
                       <Animated.View
@@ -289,17 +294,14 @@ const HomeScreen = () => {
                         entering={SlideInDown.springify()
                           .damping(17)
                           .mass(0.9)
-                          .delay(index * 100)
-                        
-                        }
+                          .delay(index * 100)}
                       >
                         <LargeRecipeCard
-                          key={recipe.id}
-                          index ={index}
+                          index={index}
                           recipe={recipe}
                           isFav={isFavourite}
                         />
-                       </Animated.View>
+                      </Animated.View>
                     );
                   })}
                 </View>
@@ -311,10 +313,13 @@ const HomeScreen = () => {
               <Typography variant="xl" bold className="ml-3 mt-3 mb-[-20px] ">
                 Recipe of the Day
               </Typography>
-              <Animated.View entering={SlideInLeft.springify()
-                          .damping(17)
-                          .mass(0.9)
-                          .delay(150)} className="items-center mb-7">
+              <Animated.View
+                entering={SlideInLeft.springify()
+                  .damping(17)
+                  .mass(0.9)
+                  .delay(150)}
+                className="items-center mb-7"
+              >
                 <TouchableOpacity
                   className="bg-white flex-row p-2 h-[160px] w-[95%] items-center rounded-3xl mt-8"
                   style={{
@@ -327,16 +332,26 @@ const HomeScreen = () => {
                   onPress={() =>
                     navigation.navigate("RecipeOfTheDayDetails", {
                       recipe: recipeOfDay,
+                      isFav:
+                        recipeOfDay.id && favList?.includes(recipeOfDay.id),
                     })
                   }
                 >
                   {/* heart icon  */}
                   <TouchableOpacity className="absolute top-3 left-3 z-10 opacity-90 items-center bg-white p-2 py-[6] pt-2 rounded-full">
-                    <MaterialIcons
-                      name="favorite-border"
-                      size={24}
-                      color="red"
-                    />
+                    {recipeOfDay.id && favList?.includes(recipeOfDay.id) ? (
+                      <MaterialIcons
+                        name="favorite"
+                        size={24}
+                        color="#FF007A"
+                      />
+                    ) : (
+                      <MaterialIcons
+                        name="favorite-border"
+                        size={24}
+                        color="red"
+                      />
+                    )}
                   </TouchableOpacity>
                   {/* image container */}
                   <View className="w-[30%] h-full rounded-3xl items-center mr-11  justify-center ml-[10px]">
@@ -384,6 +399,8 @@ const HomeScreen = () => {
                       onPress={() =>
                         navigation.navigate("RecipeOfTheDayDetails", {
                           recipe: recipeOfDay,
+                          isFav:
+                            recipeOfDay.id && favList?.includes(recipeOfDay.id),
                         })
                       }
                     >
@@ -404,25 +421,18 @@ const HomeScreen = () => {
                 Recommended Recipes
               </Typography>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {recommendedRecipes.map((recipe,index) => {
-                  const isFavourite =
-                    recipe.id &&
-                    favourites?.some((favrecipe) => favrecipe.id == recipe.id);
+                {recommendedRecipes.map((recipe, index) => {
+                  const isFavourite = recipe.id && favList?.includes(recipe.id);
 
                   return (
-                    <Animated.View entering={SlideInRight
-                      .springify()
-                      .damping(17)
-                      .mass(0.9)
-                      .delay(index * 100)
-                    }
-                    key={recipe.id}
-                    >
-                    <RecipeCard
+                    <Animated.View
+                      entering={SlideInRight.springify()
+                        .damping(17)
+                        .mass(0.9)
+                        .delay(index * 100)}
                       key={recipe.id}
-                      recipe={recipe}
-                      isFav={isFavourite}
-                    />
+                    >
+                      <RecipeCard recipe={recipe} isFav={isFavourite} />
                     </Animated.View>
                   );
                 })}
@@ -432,10 +442,8 @@ const HomeScreen = () => {
                 Popular Recipes
               </Typography>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {popularRecipes.map((recipe,index) => {
-                  const isFavourite =
-                    recipe.id &&
-                    favourites?.some((favrecipe) => favrecipe.id == recipe.id);
+                {popularRecipes.map((recipe, index) => {
+                  const isFavourite = recipe.id && favList?.includes(recipe.id);
 
                   let calorieNutrient = recipe.nutrition.nutrients.find(
                     (nutrient) => nutrient.name === "Calories"
@@ -445,18 +453,17 @@ const HomeScreen = () => {
                     ? Math.round(calorieNutrient.amount)
                     : 0;
                   return (
-                    <Animated.View entering={SlideInRight
-                      .springify()
-                      .damping(17)
-                      .mass(0.9)
-                      .delay(index * 100)
-                    }
+                    <Animated.View
+                      entering={SlideInRight.springify()
+                        .damping(17)
+                        .mass(0.9)
+                        .delay(index * 100)}
                     >
-                    <RecipeCard
-                      key={recipe.id}
-                      recipe={recipe}
-                      isFav={isFavourite}
-                    />
+                      <RecipeCard
+                        key={recipe.id}
+                        recipe={recipe}
+                        isFav={isFavourite}
+                      />
                     </Animated.View>
                   );
                 })}
@@ -470,10 +477,8 @@ const HomeScreen = () => {
                 horizontal
                 showsHorizontalScrollIndicator={false}
               >
-                {trendingRecipes.map((recipe,index) => {
-                  const isFavourite =
-                    recipe.id &&
-                    favourites?.some((favrecipe) => favrecipe.id == recipe.id);
+                {trendingRecipes.map((recipe, index) => {
+                  const isFavourite = recipe.id && favList?.includes(recipe.id);
 
                   let calorieNutrient = recipe.nutrition.nutrients.find(
                     (nutrient) => nutrient.name === "Calories"
@@ -484,20 +489,14 @@ const HomeScreen = () => {
                     : 0;
 
                   return (
-                    <Animated.View entering={SlideInRight
-                      .springify()
-                      .damping(17)
-                      .mass(0.9)
-                      .delay(index * 100)
-                    }
-                    key={recipe.id}
-                    >
-                    
-                    <RecipeCard
+                    <Animated.View
+                      entering={SlideInRight.springify()
+                        .damping(17)
+                        .mass(0.9)
+                        .delay(index * 100)}
                       key={recipe.id}
-                      recipe={recipe}
-                      isFav={isFavourite}
-                    />
+                    >
+                      <RecipeCard recipe={recipe} isFav={isFavourite} />
                     </Animated.View>
                   );
                 })}

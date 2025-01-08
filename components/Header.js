@@ -56,8 +56,9 @@ const Header = ({ autoFocus = false }) => {
   return (
     <View className="sticky">
       <SafeAreaView>
-        <View className="bg-slate-100 w-[100%] h-25 pt-10 pb-2 flex flex-row items-center justify-between shadow-sm border-b-1 border-black fixed">
-          <View className="items-center bg-slate-200 w-[75%] flex-row ml-7 rounded-3xl">
+        <View className="bg-slate-100 w-[100%] h-25 pt-[40] pb-3 flex flex-row items-center justify-between shadow-sm border-b-1 border-black fixed">
+
+          <View className="items-center bg-slate-200 w-[85%] flex-row ml-7 rounded-3xl">
             <TouchableOpacity>
               <FontAwesome
                 style={{
@@ -74,7 +75,7 @@ const Header = ({ autoFocus = false }) => {
             </TouchableOpacity>
             <TextInput
               cursorColor={"#FC8019"}
-              className="w-[80%] font-Poppins mt-1 h-12 ml-4 rounded-2xl overflow-hidden"
+              className="w-[90%] font-PoppinsMedium mt-1 h-12 ml-4 rounded-2xl overflow-hidden"
               placeholder="Search for Recipes"
               onChangeText={handleQueryChange}
               onFocus={handleFocus}
@@ -84,14 +85,14 @@ const Header = ({ autoFocus = false }) => {
               
             />
           </View>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <FontAwesome
               style={{ marginRight: 24 }}
               name="bell-o"
               size={28}
               color="black"
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </SafeAreaView>
     </View>

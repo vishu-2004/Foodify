@@ -2,39 +2,38 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, Pressable } from 'reac
 import React, { useRef, useMemo, useCallback, useState,useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import EvilIcons from '@expo/vector-icons/EvilIcons';
+
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { MaterialIcons } from '@expo/vector-icons';
-import { addToFavourites, removeFromFavourites } from '../redux/action';
+
 import { useDispatch, useSelector } from 'react-redux';
 import Typography from '../components/Typography/Typography';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../Contexts/AuthContext';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const RecipeOfTheDayDetails = ({ route }) => {
 
     const [activeTab, setActiveTab] = useState('Ingredients');
-    const { recipe, isFav } = route.params;
+    const { recipe,isFav } = route.params;
     const { extendedIngredients } = recipe;
-    const [isFavourite, setIsFavourite] = useState(true);
-    const favourites = useSelector((state)=>state.recipeReducer.favourites)
-
-    useEffect(()=>{
-        console.log(recipe);
-    },[])
+    const [isFavourite, setIsFavourite] = useState(isFav);
     
-    useEffect(() => {
-        setIsFavourite(recipe.id && favourites?.some((favrecipe) => favrecipe.id === recipe.id));
-    }, [recipe, favourites]);
+    const {profile,fetchSession} = useAuth();
 
+   
+    
+    
    
    
     // Correct use of ref with useRef()
     const sheetRef = useRef(null);
 
     // Snap points for the bottom sheet
-    const snapPoints = useMemo(() => ['62%', '87%'], []);
+    const snapPoints = useMemo(() => ['64%', '87%'], []);
 
     // Handle changes in bottom sheet
     const handleSheetChange = useCallback((index) => {
@@ -93,33 +92,103 @@ const RecipeOfTheDayDetails = ({ route }) => {
     const truncatedSummary = truncateSummary(recipe.summary, maxLength)
     const dispatch = useDispatch();
 
-    const handleAddToFav = (recipe)=>{
-        dispatch(addToFavourites(recipe));
-        console.log(favourites.length);
-    }
-    const handleRemoveFromFav = (recipe)=>{
-        dispatch(removeFromFavourites(recipe));
-        console.log(favourites.length);
-    }
+    const handleAddToFav = async (recipe) => {
+        try {
+            setIsFavourite(true);
+      
+          
+          const { data: userData, error: fetchError } = await supabase
+            .from("users")
+            .select("favourite_recipes")
+            .eq("id", profile.id)
+            .single();
+      
+          if (fetchError) {
+            setIsFavourite(false);
+            throw new Error(fetchError.message);
+           
+          }
+      
+          const currentFavs = userData?.favourite_recipes || []; 
+      
+          
+          
+      
+          
+          const updatedFavs = [...currentFavs, recipe];
+      
+        
+          const { error: updateError } = await supabase
+            .from("users")
+            .update({ favourite_recipes: updatedFavs })
+            .eq("id", profile.id);
+      
+          if (updateError) {
+            setIsFavourite(false);
+            throw new Error(updateError.message);
+          }
+          await fetchSession();
+          console.log("Recipe added to favorites successfully!");
+        } catch (error) {
+          console.error("Error adding recipe to favorites:", error.message);
+        }
+      };
+      const handleRemoveFromFav = async (recipe) => {
+        try {
+          setIsFavourite(false);
+      
+          
+          const { data: userData, error: fetchError } = await supabase
+            .from("users")
+            .select("favourite_recipes")
+            .eq("id", profile.id)
+            .single();
+      
+          if (fetchError) {
+            setIsFavourite(true);
+            throw new Error(fetchError.message);
+          }
+      
+          const currentFavs = userData?.favourite_recipes || [];
+      
+         
+          const updatedFavs = currentFavs.filter((fav) => fav.id !== recipe.id);
+      
+         
+          const { error: updateError } = await supabase
+            .from("users")
+            .update({ favourite_recipes: updatedFavs })
+            .eq("id", profile.id);
+      
+          if (updateError) {
+            setIsFavourite(true);
+            throw new Error(updateError.message);
+          }
+      
+          await fetchSession(); 
+          console.log("Recipe removed from favorites successfully!");
+        } catch (error) {
+          console.error("Error removing recipe from favorites:", error.message);
+        }
+      };
+      
     return (
         <View style={styles.container}>
             <StatusBar style="light" />
 
             {/* Image display */}
-            <TouchableOpacity className="absolute top-12 right-5 z-10 opacity-90 items-center bg-white p-3 py-[9] pt-3 rounded-full"
-                
-            >
-                {isFav && isFavourite?
-                <Pressable onPress={()=>handleRemoveFromFav(recipe)}>
+           
+                { isFavourite?
+                <Pressable className="absolute top-12 right-5 z-10 opacity-90 items-center bg-white p-3 py-[9] pt-3 rounded-full" onPress={()=>handleRemoveFromFav(recipe)}>
             <MaterialIcons name="favorite" size={29} color="#FF007A" />
             </Pressable>
             :
-            <Pressable onPress={()=>handleAddToFav(recipe)}>
+            <Pressable className="absolute top-12 right-5 z-10 opacity-90 items-center bg-white p-3 py-[9] pt-3 rounded-full" onPress={()=>handleAddToFav(recipe)}>
             <MaterialIcons name="favorite-border" size={29} color="red" />
             </Pressable>
                 }
                 
-            </TouchableOpacity>
+            
             <View style={styles.imageContainer}>
                 <Image source={require('../assets/pancake.jpg')} style={styles.image} />
             </View>
@@ -132,7 +201,7 @@ const RecipeOfTheDayDetails = ({ route }) => {
                 onChange={handleSheetChange}
             >
 
-                <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
+                <BottomSheetScrollView nestedScrollEnabled={true} contentContainerStyle={styles.contentContainer}>
                     {/* Recipe Title */}
                     <Typography variant='xl' class='pr-2  mt-[-4]' bold>{recipe.title}</Typography>
                     <Typography variant='sm' className="opacity-70 mt-[8] mb-3">
@@ -214,7 +283,7 @@ const RecipeOfTheDayDetails = ({ route }) => {
 
                     {/* Ingredients list */}
                     {activeTab === "Ingredients" &&
-                        <View className="mt-5 mx-1">
+                        <ScrollView nestedScrollEnabled={true} className="mt-5 mx-1">
                             {extendedIngredients.map((ingredient,index) => (
                                 <Animated.View entering={FadeInDown.springify()
                                     .damping(17)
@@ -234,7 +303,7 @@ const RecipeOfTheDayDetails = ({ route }) => {
                                     </View>
                                 </Animated.View>
                             ))}
-                        </View>
+                        </ScrollView>
 
                     }
                      {/* Instructions */}
@@ -266,10 +335,10 @@ const styles = StyleSheet.create({
     imageContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: -110,
+        marginTop: -123,
     },
     image: {
-        height: '58.9%',
+        height: '57.3%',
         width: '100%',
         
     },

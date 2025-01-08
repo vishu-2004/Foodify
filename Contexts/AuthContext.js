@@ -8,55 +8,54 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
 
-  useEffect(() => {
-    const fetchSession = async () => {
-      try {
-        const { data: sessionData, error } = await supabase.auth.getSession();
+  const fetchSession = async () => {
+    try {
+      const { data: sessionData, error } = await supabase.auth.getSession();
 
-        if (error) {
-          console.error("Error fetching session:", error.message);
-          return;
-        } else {
-          setSession(sessionData.session);
+      if (error) {
+        console.error("Error fetching session:", error.message);
+        return;
+      } else {
+        setSession(sessionData.session);
 
-          if (sessionData.session) {
-            const { data: userProfile, error: userError } = await supabase
-              .from("users")
-              .select("*")
-              .eq("id", sessionData.session.user.id)
-              .single();
+        if (sessionData.session) {
+          const { data: userProfile, error: userError } = await supabase
+            .from("users")
+            .select("*")
+            .eq("id", sessionData.session.user.id)
+            .single();
 
-            if (userError) {
-              console.error("Error fetching user profile:", userError.message);
-            } else {
-              console.log(userProfile);
-              setProfile(userProfile || null); 
-            }
+          if (userError) {
+            console.error("Error fetching user profile:", userError.message);
+          } else {
+            console.log(userProfile);
+            setProfile(userProfile || null); 
           }
         }
-      } catch (error) {
-        console.error("Error in fetchSession:", error);
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (error) {
+      console.error("Error in fetchSession:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+
+  useEffect(() => {
+    
     fetchSession();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
+   supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
       }
     );
 
-    return () => {
-      
-      authListener?.unsubscribe();
-    };
+   
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, loading,profile }}>
+    <AuthContext.Provider value={{ session, loading,profile,fetchSession }}>
       {children}
     </AuthContext.Provider>
   );

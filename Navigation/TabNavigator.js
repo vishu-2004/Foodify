@@ -1,15 +1,18 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { FavouritesStackNavigator, HomeStackNavigator, PostRecipeStackNavigator, ProfileStackNavigator } from "./StackNavigator";
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-
+import {
+  FavouritesStackNavigator,
+  HomeStackNavigator,
+  PostRecipeStackNavigator,
+  ProfileStackNavigator,
+} from "./StackNavigator";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 
 const TabNav = createBottomTabNavigator();
 
 const TabNavigator = () => {
- 
-
   return (
     <TabNav.Navigator
       screenOptions={{
@@ -17,47 +20,65 @@ const TabNavigator = () => {
         tabBarActiveTintColor: "#FC8019",
         tabBarInactiveTintColor: "black",
         tabBarStyle: {
-         
-
-         
-          
           elevation: 10,
-          backgroundColor: '#ffffff',
+          backgroundColor: "#ffffff",
           borderTopLeftRadius: 15,
           borderTopRightRadius: 15,
           height: 76,
-          shadowColor: '#000',
+          shadowColor: "#000",
           shadowOpacity: 0.1,
           shadowOffset: { width: 0, height: -10 },
           shadowRadius: 10,
-         
+          
         },
         tabBarLabelStyle: {
-          fontFamily:"Poppins-SemiBold",
+          fontFamily: "Poppins-SemiBold",
           fontSize: 14,
           paddingBottom: 10,
           marginTop: -10,
-          fontWeight: '600',
+          fontWeight: "600",
         },
-        keyboardHidesTabBar:true,
-        tabBarHideOnKeyboard: true
+        keyboardHidesTabBar: true,
+        tabBarHideOnKeyboard: true,
       }}
     >
-      <TabNav.Screen 
-        name="Home" 
+      <TabNav.Screen
+        name="Home"
         component={HomeStackNavigator}
-        options={{
-          
-          tabBarIcon: ({ focused }) => (
+        options={({ route }) => ({
+          tabBarStyle: (() => {
+            const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+            console.log(routeName); 
+            if (routeName === "RecipeDetailsScreen" || routeName === "RecipeOfTheDayDetails" ) {
+              return { display: "none" }; 
+            }
+            return {
+              elevation: 10,
+              backgroundColor: "#ffffff",
+              borderTopLeftRadius: 15,
+              borderTopRightRadius: 15,
+              height: 76,
+              shadowColor: "#000",
+              shadowOpacity: 0.1,
+              shadowOffset: { width: 0, height: -10 },
+              shadowRadius: 10,
+              
+            };
+          })(),
+          tabBarIcon: ({ focused }) =>
             focused ? (
               <MaterialCommunityIcons name="home" size={26} color="#FC8019" />
             ) : (
-              <MaterialCommunityIcons name="home-outline" size={26} color="black" />
-            )
-          ),
-        }}  
+              <MaterialCommunityIcons
+                name="home-outline"
+                size={26}
+                color="black"
+              />
+            ),
+        })}
       />
-       {/* <TabNav.Screen 
+
+      {/* <TabNav.Screen 
         name="Upload" 
         component={PostRecipeStackNavigator}
         options={{
@@ -70,34 +91,32 @@ const TabNavigator = () => {
           ),
         }}
       /> */}
-      <TabNav.Screen 
-        name="Favourites" 
+      <TabNav.Screen
+        name="Favourites"
         component={FavouritesStackNavigator}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({ focused }) =>
             !focused ? (
               <MaterialIcons name="favorite-border" size={26} color="black" />
             ) : (
               <MaterialIcons name="favorite" size={26} color="#FC8019" />
-            )
-          ),
+            ),
         }}
       />
-      <TabNav.Screen 
-        name="Profile" 
+      <TabNav.Screen
+        name="Profile"
         component={ProfileStackNavigator}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({ focused }) =>
             focused ? (
               <MaterialIcons name="person" size={24} color="#FC8019" />
             ) : (
               <MaterialIcons name="person-outline" size={24} color="black" />
-            )
-          ),
+            ),
         }}
-      /> 
+      />
     </TabNav.Navigator>
   );
-}
+};
 
 export default TabNavigator;

@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity,Image,Button } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import { MaterialIcons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
@@ -19,6 +19,12 @@ const LargeRecipeCard = ({recipe,isFav}) => {
   const truncatedSummary = truncateSummary(recipe.summary,maxLength)
   let calorieNutrient = recipe.nutrition.nutrients.find(nutrient => nutrient.name === "Calories");
   const navigation = useNavigation();
+  const [isFavourite,setIsFavourite] = useState(isFav);
+
+  useEffect(()=>{
+    setIsFavourite(isFav);
+    console.log(isFav);
+  },[isFav])
 
   let calories = calorieNutrient ? Math.round(calorieNutrient.amount) : 0;
   return (
@@ -34,7 +40,7 @@ const LargeRecipeCard = ({recipe,isFav}) => {
         
         onPress={() => {
           // console.log(recipe.instructions);
-           navigation.navigate('RecipeDetailsScreen', {recipe})}}
+           navigation.navigate('RecipeDetailsScreen', {recipe,isFav:isFavourite})}}
       >
         {/* heart icon  */}
         <TouchableOpacity className="absolute top-4 left-3 z-10 opacity-90 items-center bg-white p-2 py-[6] rounded-full">
