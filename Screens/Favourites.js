@@ -13,11 +13,11 @@ import Animated, {
 
 const Favourites = () => {
   const {profile} = useAuth();
-  const [favRecipes,setFavRecipes] = useState(profile.favourite_recipes)
+  const [favRecipes,setFavRecipes] = useState(profile?.favourite_recipes?profile.favourite_recipes:[])
 
   useEffect(()=>{
-    console.log(profile.favourite_recipes.length);
-    setFavRecipes(profile.favourite_recipes);
+    console.log(profile?.favourite_recipes.length);
+    setFavRecipes(profile?.favourite_recipes);
   },[profile])
   return (
     <View className= "flex-1 bg-white h-full">
@@ -35,7 +35,7 @@ const Favourites = () => {
       <ScrollView>
         {/* ///display ui */}
         <View className="flex-1 h-max pb-10 mt-[-20]">
-          {favRecipes.map((recipe,index) => {
+          {favRecipes.length > 0 && favRecipes.map((recipe,index) => {
             
 
             return (

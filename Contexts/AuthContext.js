@@ -9,7 +9,9 @@ const AuthProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
 
   const fetchSession = async () => {
+
     try {
+      setLoading(true);
       const { data: sessionData, error } = await supabase.auth.getSession();
 
       if (error) {
@@ -55,7 +57,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, loading,profile,fetchSession }}>
+    <AuthContext.Provider value={{ session, loading,profile,fetchSession,setProfile }}>
       {children}
     </AuthContext.Provider>
   );

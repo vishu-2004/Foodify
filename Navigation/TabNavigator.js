@@ -78,8 +78,8 @@ const TabNavigator = () => {
         })}
       />
 
-      {/* <TabNav.Screen 
-        name="Upload" 
+      <TabNav.Screen 
+        name="Generate" 
         component={PostRecipeStackNavigator}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -90,7 +90,7 @@ const TabNavigator = () => {
             )
           ),
         }}
-      /> */}
+      />
       <TabNav.Screen
         name="Favourites"
         component={FavouritesStackNavigator}

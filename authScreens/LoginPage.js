@@ -5,6 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { supabase } from "../lib/supabase";
 import { ModalContext } from "../Contexts/modalContext";
+import { useAuth } from "../Contexts/AuthContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ const LoginPage = () => {
   const navigation = useNavigation();
   const [loading,setLoading] = useState(false);
   const modalCtx = useContext(ModalContext);
+  const {fetchSession} = useAuth();
 
   const handleSignIn = async () => {
     if (!email || !password ) {
@@ -47,6 +49,7 @@ const LoginPage = () => {
       
       setEmail("");
       setPassword("");
+      await fetchSession();
      
       navigation.navigate("MainApp");
     }

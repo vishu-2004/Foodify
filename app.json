@@ -7,9 +7,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splashImage.png",
+     
       "resizeMode": "contain",
-      "backgroundColor": "#F1F0EB"
+      "backgroundColor": "white"
     },
     "ios": {
       "supportsTablet": true

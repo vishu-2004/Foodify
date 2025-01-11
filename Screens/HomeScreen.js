@@ -73,7 +73,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     setisLoading(true);
-    console.log("fav =>", profile.favourite_recipes.length);
+    console.log("fav =>", profile?.favourite_recipes.length);
     const currentFavIds =
       profile?.favourite_recipes?.map((obj) => obj.id) || [];
     setFavList(currentFavIds);
@@ -219,7 +219,7 @@ const HomeScreen = () => {
         <ScrollView>
           <View className="">
             <Typography variant="normal" class="mt-3  ml-3 ">
-              Hello, {profile.name}! 👋
+              Hello, {profile?.name?profile.name:""}! 👋
             </Typography>
             <Text className="mt-2 ml-3 text-[28px]  font-PoppinsSemiBold  font-medium tracking-wide">
               Ready to <Text className="text-[#FC8019] font-bold">Cook</Text>{" "}
