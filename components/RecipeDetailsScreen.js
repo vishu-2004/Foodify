@@ -160,6 +160,30 @@ const RecipeDetailsScreen = ({ route }) => {
           console.error("Error removing recipe from favorites:", error.message);
         }
       };
+
+      const proteinNutrient = recipe.nutrition.nutrients.find(
+        (nutrient) => nutrient.name === "Protein"
+      );
+      
+      const proteinAmount = proteinNutrient ? Math.round(proteinNutrient.amount) : 7; 
+      const calories = recipe.nutrition.nutrients.find(
+        (nutrient) => nutrient.name === "Calories"
+      )?.amount || 170;
+      
+      const fat = recipe.nutrition.nutrients.find(
+        (nutrient) => nutrient.name === "Fat"
+      )?.amount || 7;
+      
+      const carbohydrates = recipe.nutrition.nutrients.find(
+        (nutrient) => nutrient.name === "Carbohydrates"
+      )?.amount || 40;
+      
+      
+      const roundedCalories = Math.round(calories);
+      const roundedFat = Math.round(fat);
+      const roundedCarbohydrates = Math.round(carbohydrates);
+      
+      
       
     return (
         <View style={styles.container}>
@@ -185,6 +209,7 @@ const RecipeDetailsScreen = ({ route }) => {
                 index={0} // Initially show the bottom sheet at index 1 (50%)
                 snapPoints={snapPoints}
                 onChange={handleSheetChange}
+                style={{paddingBottom:10}}
             >
 
                 <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
@@ -199,26 +224,26 @@ const RecipeDetailsScreen = ({ route }) => {
                                 <FontAwesome6 name="wheat-awn" size={21} color="black" />
 
                             </View>
-                            <Typography variant='sm' className="ml-2 opacity-70  ">{Math.round(recipe.nutrition.nutrients[4].amount)} gm Carbs</Typography>
+                            <Typography variant='sm' className="ml-2 opacity-70  ">{roundedCarbohydrates} gm Carbs</Typography>
 
                         </View>
                         <View className="w-[48%] flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <MaterialCommunityIcons name="egg-fried" size={29} color="black" />
                             </View>
-                            <Typography variant='sm' className="ml-2 opacity-70 ">{Math.round(recipe.nutrition.nutrients[11].amount)} gm Protein</Typography>
+                            <Typography variant='sm' className="ml-2 opacity-70 ">{proteinAmount} gm Protein</Typography>
                         </View>
                         <View className="w-[48%] flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <FontAwesome5 name="pizza-slice" size={22} color="black" />
                             </View>
-                            <Typography variant='sm' className="ml-2 opacity-70 ">{Math.round(recipe.nutrition.nutrients[2].amount)} gm Fat</Typography>
+                            <Typography variant='sm' className="ml-2 opacity-70 ">{roundedFat} gm Fat</Typography>
                         </View>
                         <View className="w-[48%] flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <FontAwesome6 name="fire" size={21} color="black" />
                             </View>
-                            <Typography variant='sm' className="ml-2 opacity-70 ">{Math.round(recipe.nutrition.nutrients[0].amount)} kcal</Typography>
+                            <Typography variant='sm' className="ml-2 opacity-70 ">{roundedCalories} kcal</Typography>
                         </View>
                     </View>
 
@@ -333,6 +358,9 @@ const styles = StyleSheet.create({
         padding: 20,
         elevation: 50,
         borderRadius: 20,
+        
+        
+        
     },
     title: {
         marginTop: -5,

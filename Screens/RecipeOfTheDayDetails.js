@@ -220,13 +220,13 @@ const RecipeOfTheDayDetails = ({ route }) => {
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <MaterialCommunityIcons name="egg-fried" size={29} color="black" />
                             </View>
-                            <Typography variant='sm' className="ml-2 opacity-70 ">{Math.round(recipe.nutrition.nutrients[11].amount)} gm Protein</Typography>
+                            <Typography variant='sm' className="ml-2 opacity-70 ">5 gm Protein</Typography>
                         </View>
                         <View className="w-[48%] flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <FontAwesome5 name="pizza-slice" size={22} color="black" />
                             </View>
-                            <Typography variant='sm' className="ml-2 opacity-70 ">{Math.round(recipe.nutrition.nutrients[2].amount)} gm Fat</Typography>
+                            <Typography variant='sm' className="ml-2 opacity-70 ">7 gm Fat</Typography>
                         </View>
                         <View className="w-[48%] flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">

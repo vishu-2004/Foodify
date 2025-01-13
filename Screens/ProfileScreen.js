@@ -21,6 +21,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { randomUUID } from "expo-crypto";
 import { decode } from "base64-arraybuffer";
+import LinearGradient from 'expo-linear-gradient'
 
 const ProfileScreen = () => {
   const [selectedImage, setSelectedImage] = useState("");
@@ -148,10 +149,18 @@ const ProfileScreen = () => {
 
   return (
     <View className="flex-1 items-center  bg-white ">
+     <LinearGradient
+      colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.8)']}
+      locations={[0, 1]}
+      start={{ x: 0.5, y: 0 }}
+      end={{ x: 0.5, y: 1 }}
+      className="absolute h-[31.7%] w-full -z-10"
+    >
       <Image
         source={require("../assets/bg.jpg")}
-        className="h-[31.7%] top-[-30] w-[100%] rounded-2xl absolute -z-10"
+        className="h-[100%] top-[-30] w-[100%] rounded-2xl"
       />
+    </LinearGradient>
       <View className="bg-white w-[130] h-[130] mt-[140] border-black border rounded-full">
         {loading ? (
           <ActivityIndicator />

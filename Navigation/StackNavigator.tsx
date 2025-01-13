@@ -14,6 +14,7 @@ import { createSharedElementStackNavigator } from "react-navigation-shared-eleme
 import OptionPage from "../authScreens/OptionPage";
 import LoginPage from "../authScreens/LoginPage";
 import SignUpPage from "../authScreens/SignUpPage";
+import AIRecipeDisplay from "../Screens/AIRecipeDisplay";
 
 const Stack = createStackNavigator();
 
@@ -60,6 +61,7 @@ const PostRecipeStackNavigator = () =>{
   return(
     <Stack.Navigator screenOptions={{headerShown:false}}>
     <Stack.Screen name="Post Recipe" component={PostRecipe}/>
+    <Stack.Screen name="AiRecipeDisplay" component={AIRecipeDisplay}/>
     </Stack.Navigator>
   );
 }

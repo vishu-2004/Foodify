@@ -56,7 +56,7 @@ const LargeRecipeCard = ({recipe,isFav}) => {
             <Image className = "h-[140] w-[150] ml-6 object-cover  rounded-3xl" source={{uri:recipe.image}}/>
         </View>
         {/* details container  */}
-        <View className = "w-[56%] h-full mt-2">
+        <View className = "w-[56.7%] 0 h-full mt-2">
             <Typography variant='normal' bold className = " text-gray-900">{recipe.title}</Typography>
             <Typography variant='xsm' className = " opacity-60 mt-2 ">{truncatedSummary}</Typography>
             {/* time and calories */}
