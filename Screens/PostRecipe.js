@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Pressable } from "react-native";
 import React, { useContext, useState } from "react";
 import Typography from "../components/Typography/Typography";
 import { Dropdown } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
+
 import { StyleSheet } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { TouchableOpacity } from "@gorhom/bottom-sheet";
@@ -141,11 +141,10 @@ Exclude any additional text or introduction.`;
       // Generate recipe
       const result = await model.generateContent(prompt);
       const recipeText = result.response.text();
-      console.log('Generated Recipe: =>>>', recipeText);
-
+     
       // Extract recipe data
       const recipe = extractRecipe(recipeText);
-      console.log('Parsed Recipe:', recipe);
+      
 
       if (!recipe.name) {
         throw new Error('Failed to generate recipe name');
@@ -157,7 +156,7 @@ Exclude any additional text or introduction.`;
      
 
       const imageResponse = await fetch(imageapi);
-      console.log("Image api response=>>",imageResponse);
+     
       const imageData = await imageResponse.json();
 
       if (!imageData.items || imageData.items.length === 0) {
@@ -165,7 +164,7 @@ Exclude any additional text or introduction.`;
       }
 
       const regularImgUrl = imageData.items[0].link;
-      console.log('Recipe Image URL:', regularImgUrl);
+      
 
       Object.assign(recipe,{img:regularImgUrl});
       navigation.navigate('AiRecipeDisplay',{recipe:recipe});

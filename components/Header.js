@@ -1,6 +1,6 @@
 import {
   SafeAreaView,
-  Text,
+  
   View,
   TouchableOpacity,
   TextInput,
@@ -26,7 +26,7 @@ const Header = ({ autoFocus = false }) => {
 
   const handleBlur = () => {
     if (searchFocus) {
-      console.log("Input blurred");
+      
       dispatch(setSearchFocus(false));
       dispatch(setSearchQuery(''));
     }

@@ -34,7 +34,7 @@ function* findWorkingApiKey(baseUrl) {
         return { apiKey, url, data };
       }
     } catch (error) {
-      console.log(`Error with API key ${apiKey}:`, error);
+      
     }
   }
   

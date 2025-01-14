@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable } from "react-native";
+import { View, Image, Pressable } from "react-native";
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 import Typography from "../components/Typography/Typography";

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, Pressable } from 'react-native'
+import { View, ScrollView, Image, Pressable } from 'react-native'
 import React from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { StatusBar } from 'expo-status-bar';
@@ -8,7 +8,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 const AIRecipeDisplay = () => {
     const route = useRoute();
     const { recipe } = route.params;
-    console.log(recipe);
+    
     const navigation = useNavigation();
     return (
         <View className="flex-1 h-full bg-white w-full">

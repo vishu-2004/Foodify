@@ -1,18 +1,18 @@
 import {
   View,
-  Text,
+  
   Image,
   TextInput,
   Pressable,
   Alert,
-  Linking,
+  
 } from "react-native";
 import React, { useContext, useState } from "react";
 import Typography from "../components/Typography/Typography";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import AntDesign from "@expo/vector-icons/AntDesign";
+
 import { ModalContext } from "../Contexts/modalContext";
 import { supabase } from "../lib/supabase";
 import { ActivityIndicator } from "react-native";
@@ -112,9 +112,9 @@ const SignUpPage = () => {
         <View className="absolute items-center  bottom-[-34] rounded-3xl bg-white w-[93%] h-[80%]">
           <Image
             source={require("../assets/authPics/signup.png")}
-            className="h-[314px] w-[100%] top-[-170] absolute z-10"
+            className="h-[300px] w-[86%] left-5 top-[-170] absolute z-10"
           />
-          <ScrollView className="flex-1 mt-[70] ">
+          <ScrollView showsVerticalScrollIndicator={false} className="flex-1 mt-[70] ">
             <Image
               source={require("../assets/logo.png")}
               className="h-[66]  w-[66]  "
@@ -184,8 +184,7 @@ const SignUpPage = () => {
                 <Typography
                   bold
                   class="text-[13px]   text-primaryOrange underline"
-                >
-                  Log In
+                > Log In
                 </Typography>
               </Typography>
             </TouchableOpacity>

@@ -1,5 +1,5 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
-import React, { useRef, useMemo, useCallback, useState,useEffect } from 'react';
+import React, { useRef, useMemo, useCallback, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 
@@ -8,7 +8,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Typography from '../components/Typography/Typography';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { supabase } from '../lib/supabase';
@@ -128,7 +128,7 @@ const RecipeOfTheDayDetails = ({ route }) => {
             throw new Error(updateError.message);
           }
           await fetchSession();
-          console.log("Recipe added to favorites successfully!");
+          
         } catch (error) {
           console.error("Error adding recipe to favorites:", error.message);
         }
@@ -166,7 +166,7 @@ const RecipeOfTheDayDetails = ({ route }) => {
           }
       
           await fetchSession(); 
-          console.log("Recipe removed from favorites successfully!");
+          
         } catch (error) {
           console.error("Error removing recipe from favorites:", error.message);
         }

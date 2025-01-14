@@ -1,4 +1,4 @@
-import { View, Text, Image, TextInput, Pressable,ActivityIndicator } from "react-native";
+import { View, Image, TextInput, Pressable,ActivityIndicator } from "react-native";
 import React, { useState ,useContext} from "react";
 import Typography from "../components/Typography/Typography";
 import { TouchableOpacity } from "react-native-gesture-handler";

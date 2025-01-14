@@ -1,5 +1,5 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
-import React, { useRef, useMemo, useCallback, useState,useEffect ,useLayoutEffect} from 'react';
+import React, { useRef, useMemo, useCallback, useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 
@@ -127,7 +127,7 @@ const RecipeDetailsScreen = ({ route }) => {
             throw new Error(updateError.message);
           }
           await fetchSession();
-          console.log("Recipe added to favorites successfully!");
+          
         } catch (error) {
           console.error("Error adding recipe to favorites:", error.message);
         }
@@ -155,7 +155,7 @@ const RecipeDetailsScreen = ({ route }) => {
             throw new Error(updateError.message);
           }
           await fetchSession(); 
-          console.log("Recipe removed from favorites successfully!");
+          
         } catch (error) {
           console.error("Error removing recipe from favorites:", error.message);
         }

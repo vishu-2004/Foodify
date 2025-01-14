@@ -30,7 +30,7 @@ const AuthProvider = ({ children }) => {
           if (userError) {
             console.error("Error fetching user profile:", userError.message);
           } else {
-            console.log(userProfile);
+            
             setProfile(userProfile || null); 
           }
         }

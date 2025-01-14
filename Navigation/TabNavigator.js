@@ -48,7 +48,7 @@ const TabNavigator = () => {
         options={({ route }) => ({
           tabBarStyle: (() => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? "";
-            console.log(routeName); 
+             
             if (routeName === "RecipeDetailsScreen" || routeName === "RecipeOfTheDayDetails" ) {
               return { display: "none" }; 
             }

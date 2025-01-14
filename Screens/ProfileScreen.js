@@ -1,16 +1,16 @@
 import {
   View,
-  Text,
+  
   TouchableOpacity,
   Image,
-  Button,
+  
   Pressable,
-  TextInput,
+
   ActivityIndicator,
 } from "react-native";
 import React, { useContext, useState, useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import { StyleSheet } from "react-native";
+
 import { AntDesign } from "@expo/vector-icons";
 import Typography from "../components/Typography/Typography";
 import { useAuth } from "../Contexts/AuthContext";
@@ -21,7 +21,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { randomUUID } from "expo-crypto";
 import { decode } from "base64-arraybuffer";
-import LinearGradient from 'expo-linear-gradient'
+import LinearGradient from 'react-native-linear-gradient'
 
 const ProfileScreen = () => {
   const [selectedImage, setSelectedImage] = useState("");
@@ -30,6 +30,7 @@ const ProfileScreen = () => {
   const [loading, setLoading] = useState(true);
   const [userName, setuserName] = useState(profile?.name ? profile.name : "");
   const [isRead, setIsRead] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -44,7 +45,7 @@ const ProfileScreen = () => {
         if (error) throw error;
 
         if (data?.photo_url) {
-          console.log(data.photo_url);
+         
 
           const { data: publicUrlData } = supabase.storage
             .from("user_pics")
@@ -52,7 +53,7 @@ const ProfileScreen = () => {
 
           if (publicUrlData?.publicUrl) {
             setSelectedImage(publicUrlData.publicUrl);
-            console.log(publicUrlData.publicUrl);
+           
           }
         }
       } catch (err) {
@@ -133,7 +134,7 @@ const ProfileScreen = () => {
         }
 
         setSelectedImage(imageUri);
-        console.log("Image uploaded and stored successfully!");
+        
       } else {
         modalCtx.openModal("Note", "You did not select any image.", "OK");
       }
@@ -150,15 +151,15 @@ const ProfileScreen = () => {
   return (
     <View className="flex-1 items-center  bg-white ">
      <LinearGradient
-      colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.8)']}
+      colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.6)']}
       locations={[0, 1]}
       start={{ x: 0.5, y: 0 }}
       end={{ x: 0.5, y: 1 }}
-      className="absolute h-[31.7%] w-full -z-10"
+      className="absolute h-[27.7%] w-full rounded-md -z-10"
     >
       <Image
         source={require("../assets/bg.jpg")}
-        className="h-[100%] top-[-30] w-[100%] rounded-2xl"
+        className="h-[100%] top-[0] w-[100%] absolute -z-20 rounded-2xl"
       />
     </LinearGradient>
       <View className="bg-white w-[130] h-[130] mt-[140] border-black border rounded-full">
@@ -201,13 +202,13 @@ const ProfileScreen = () => {
         
         
         <View className="bg-white border-2 font-Poppins pl-3 text-base border-primaryOrange w-[80%] h-[50] rounded-2xl ml-2 mt-2">
-            <Typography variant="normal" class="mt-3">{profile.name}</Typography>
+            <Typography variant="normal" class="mt-3">{userName}</Typography>
         </View>
         <Typography variant="normal" class="mt-2 ml-2">
           Email:
         </Typography>
         <View className="bg-white border-2 font-Poppins pl-3 text-base border-primaryOrange w-[80%] h-[50] rounded-2xl ml-2 mt-2">
-            <Typography variant="normal" class="mt-3">{profile.email}</Typography>
+            <Typography variant="normal" class="mt-3">{profile?.email?profile.email:" "}</Typography>
         </View>
 
         <Pressable

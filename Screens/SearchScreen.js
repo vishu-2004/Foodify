@@ -1,23 +1,20 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import {  View, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
-import RecipeCard from "../components/RecipeCard";
-import { useSelector, useDispatch } from "react-redux";
+
+import { useSelector } from "react-redux";
 import SearchRecipeCard from "../components/SearchRecipeCard";
 import axios from "axios";
 import _ from "lodash";
 import { SharedElement } from "react-navigation-shared-element";
 import Typography from "../components/Typography/Typography";
 import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withDelay,
+
   FadeInDown,
 } from "react-native-reanimated";
 
 const SearchScreen = () => {
-  const dispatch = useDispatch();
+ 
   const searchQuery = useSelector((state) => state.recipeReducer.searchQuery);
   const trendingRecipes = useSelector(
     (state) => state.recipeReducer.trendingRecipes
@@ -47,7 +44,7 @@ const SearchScreen = () => {
           return { apiKey, url, data };
         }
       } catch (error) {
-        console.log(`Error with API key ${apiKey}:`, error.message);
+        
       }
     }
 

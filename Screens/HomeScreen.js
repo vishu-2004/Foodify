@@ -57,7 +57,7 @@ const findWorkingApiKey = async (baseUrl) => {
         return { apiKey, url, data };
       }
     } catch (error) {
-      console.log(`Error with API key ${apiKey}:`, error.message);
+     
     }
   }
 };
@@ -73,7 +73,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     setisLoading(true);
-    console.log("fav =>", profile?.favourite_recipes.length);
+    
     const currentFavIds =
       profile?.favourite_recipes?.map((obj) => obj.id) || [];
     setFavList(currentFavIds);
@@ -191,7 +191,7 @@ const HomeScreen = () => {
       );
       setcatRecipes(filteredData);
     } catch (error) {
-      console.log(error);
+      
     } finally {
       setisLoading(false);
     }

@@ -1,12 +1,12 @@
-import { View, Text, TouchableOpacity,Image,Button } from 'react-native'
+import { View, TouchableOpacity,Image } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react'
-import EvilIcons from '@expo/vector-icons/EvilIcons';
+
 import { MaterialIcons } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Entypo from '@expo/vector-icons/Entypo';
-import AntDesign from '@expo/vector-icons/AntDesign';
+
 import Typography from './Typography/Typography';
 
 const truncateSummary = (summary, maxLength) => {
@@ -23,7 +23,7 @@ const LargeRecipeCard = ({recipe,isFav}) => {
 
   useEffect(()=>{
     setIsFavourite(isFav);
-    console.log(isFav);
+    
   },[isFav])
 
   let calories = calorieNutrient ? Math.round(calorieNutrient.amount) : 0;
@@ -39,7 +39,7 @@ const LargeRecipeCard = ({recipe,isFav}) => {
         }}
         
         onPress={() => {
-          // console.log(recipe.instructions);
+          
            navigation.navigate('RecipeDetailsScreen', {recipe,isFav:isFavourite})}}
       >
         {/* heart icon  */}

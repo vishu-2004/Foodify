@@ -1,9 +1,8 @@
 import React from "react";
-import { NavigationContainer } from '@react-navigation/native';
+
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "../Screens/HomeScreen";
-import SplashScreen from "../Screens/SplashScreen";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
 import Favourites from "../Screens/Favourites";
 import PostRecipe from "../Screens/PostRecipe";
 import ProfileScreen from "../Screens/ProfileScreen";
@@ -35,7 +34,7 @@ const AuthStackNavigator = ()=>{
 const HomeStackNavigator = ()=>{
   return(
     <SharedStack.Navigator screenOptions={{headerShown:false}}>
-    <SharedStack.Screen name="Home" component={HomeScreen}/>
+    <SharedStack.Screen name="home" component={HomeScreen}/>
     <SharedStack.Screen 
         name="SearchScreen" 
         component={SearchScreen} 

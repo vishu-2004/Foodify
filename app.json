@@ -4,12 +4,11 @@
     "slug": "Foodify",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-     
       "resizeMode": "contain",
-      "backgroundColor": "white"
+      "backgroundColor": "#FFFFFF"
     },
     "ios": {
       "supportsTablet": true
@@ -18,7 +17,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#F1F0EB"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.vishu_2004.Foodify"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,7 +33,18 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ],
+      [
+        "expo-dev-client",
+        {
+          "launchMode": "most-recent"
+        }
+      ],
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3b83d1d9-6292-4053-a961-ec83772c3144"
+      }
+    }
   }
 }
