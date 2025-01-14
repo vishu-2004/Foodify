@@ -53,7 +53,7 @@ export default function App() {
           <NavigationContainer onReady={onLayoutRootView}>
             <EntryStack.Navigator
               initialRouteName="Splash"
-              screenOptions={{ headerShown: false }}
+              screenOptions={{ headerShown: false,animation: "slide_from_right" }}
             >
               <EntryStack.Screen
                 name="Splash"
