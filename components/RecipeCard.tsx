@@ -7,10 +7,18 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import Typography from './Typography/Typography';
+import { NutrientsType, RecipeTypes } from '../types/recipe';
+import { ScreenNavigationProp } from '../navigation';
 
-const RecipeCard = ({recipe,isFav}) => {
-  let calorieNutrient = recipe.nutrition.nutrients.find(nutrient => nutrient.name === "Calories");
-  const navigation = useNavigation();
+type RecipeCardProps = {
+  recipe: RecipeTypes;
+  isFav:boolean
+
+}
+
+const RecipeCard = ({recipe,isFav}:RecipeCardProps) => {
+  let calorieNutrient = recipe.nutrition.nutrients.find((nutrient:NutrientsType) => nutrient.name === "Calories");
+  const navigation = useNavigation<ScreenNavigationProp>();
 
   let calories = calorieNutrient ? Math.round(calorieNutrient.amount) : 0;
   return (
@@ -43,14 +51,14 @@ const RecipeCard = ({recipe,isFav}) => {
 
         {/* Details container */}
         <View className="bg-white w-full h-[35%] mt-[5]">
-          <Typography variant='sm' bold className=" ml-2 ">{recipe.title}</Typography>
+          <Typography variant='sm' bold class=" ml-2 ">{recipe.title}</Typography>
           <View className="ml-2 mt-2 flex-row items-center opacity-60">
             <Feather name="clock" size={18} color="black" />
-            <Typography variant='xsm' className="ml-1 mt-[2px] ">{recipe.readyInMinutes} min</Typography>
+            <Typography variant='xsm' class="ml-1 mt-[2px] ">{recipe.readyInMinutes} min</Typography>
             <Entypo name="dot-single" size={24} color="black" />
             <View className = "opacity-90 flex-row">
               <FontAwesome6 name="fire" size={17} color="black" />
-              <Typography variant='xsm' className = "ml-1 mt-[2px] ">{calories} cal</Typography>
+              <Typography variant='xsm' class = "ml-1 mt-[2px] ">{calories} cal</Typography>
             </View>
           </View>
         </View>

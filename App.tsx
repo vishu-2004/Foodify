@@ -6,8 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import TabNavigator from "./Navigation/TabNavigator";
 import SplashScreenComponent from "./Screens/SplashScreen"; 
 import { Provider } from "react-redux";
-import { AppRegistry } from "react-native";
-import { name as appName } from "./app.json";
+
 import store from "./redux/store";
 import { useFonts } from "expo-font";
 import * as SplashScreen from 'expo-splash-screen'
@@ -16,10 +15,11 @@ import { AuthStackNavigator } from "./Navigation/StackNavigator";
 import { ModalProvider } from "./Contexts/modalContext";
 import Modal from "./components/Modals";
 import AuthProvider from "./Contexts/AuthContext";
+import { RootStackParamList } from "./navigation";
  
 
 export default function App() {
-  const EntryStack = createStackNavigator();
+  const EntryStack = createStackNavigator<RootStackParamList>();
 
   const [fontsLoaded] = useFonts({
     "Poppins-Light": require("./assets/fonts/Poppins-Light.ttf"),
@@ -53,7 +53,7 @@ export default function App() {
           <NavigationContainer onReady={onLayoutRootView}>
             <EntryStack.Navigator
               initialRouteName="Splash"
-              screenOptions={{ headerShown: false,animation: "slide_from_right" }}
+              screenOptions={{ headerShown: false}}
             >
               <EntryStack.Screen
                 name="Splash"
@@ -70,4 +70,4 @@ export default function App() {
   );
 }
 
-AppRegistry.registerComponent(appName, () => App);
+

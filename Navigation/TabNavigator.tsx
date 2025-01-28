@@ -8,9 +8,10 @@ import {
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { TabStackParamList } from "../navigation";
 
 
-const TabNav = createBottomTabNavigator();
+const TabNav = createBottomTabNavigator<TabStackParamList>();
 
 const TabNavigator = () => {
   return (
@@ -38,7 +39,7 @@ const TabNavigator = () => {
           marginTop: -10,
           fontWeight: "600",
         },
-        keyboardHidesTabBar: true,
+        
         tabBarHideOnKeyboard: true,
       }}
     >

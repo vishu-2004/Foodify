@@ -5,8 +5,15 @@ import { StatusBar } from 'expo-status-bar';
 import Typography from '../components/Typography/Typography';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
+import { RouteProp } from '@react-navigation/native';
+import { AiRecipeTypes } from '../types/recipe';
+
+type RecipeDetailsRouteParams = {
+    recipe: AiRecipeTypes
+  };
+
 const AIRecipeDisplay = () => {
-    const route = useRoute();
+    const route = useRoute<RouteProp<{ params: RecipeDetailsRouteParams }, 'params'>>();
     const { recipe } = route.params;
     
     const navigation = useNavigation();
@@ -27,7 +34,7 @@ const AIRecipeDisplay = () => {
                 <Typography class='mt-2 mb-1' bold>Cooking instructions:</Typography>
                 {
                     recipe.instructions.length > 0 &&
-                    recipe.instructions.map((item,id)=>{
+                    recipe.instructions.map((item:string,id:number)=>{
                         return(
                             <View className="flex-1 " key={id}>
                                 <Typography class='mt-1'>{item}</Typography>

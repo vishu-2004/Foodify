@@ -1,12 +1,12 @@
 import { Pressable, View } from "react-native";
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
+
 import ModalOverlay from "./ModalOverlay";
 import Typography from "../Typography/Typography";
 import { ModalContext } from "../../Contexts/modalContext";
 
 const Modal = () => {  
-  const navigation = useNavigation();
+  
   const modalCtx = React.useContext(ModalContext);
 
   return (

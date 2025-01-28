@@ -16,6 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 import { ModalContext } from "../Contexts/modalContext";
 import { supabase } from "../lib/supabase";
 import { ActivityIndicator } from "react-native";
+import { ScreenNavigationProp } from "../navigation";
 
 const SignUpPage = () => {
   const [email, setEmail] = useState("");
@@ -24,27 +25,10 @@ const SignUpPage = () => {
   const [password, setPassword] = useState("");
   // const [profileImage, setProfileImage] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<ScreenNavigationProp>();
   const modalCtx = useContext(ModalContext);
 
-  const pickImageAsync = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setProfileImage(result.assets[0].uri);
-      } else {
-        Alert.alert("No image selected", "You did not select any image.");
-      }
-    } catch (error) {
-      console.error("Error picking image:", error);
-      Alert.alert("Error", "Failed to pick image");
-    }
-  };
+ 
 
   const handleSignUp = async () => {
     if (!email || !password || !confirmPass || !name) {
@@ -81,7 +65,7 @@ const SignUpPage = () => {
     const { user } = authData;
     const { error: insertError } = await supabase.from("users").insert([
       {
-        id: user.id,
+        id: user?.id,
         email: email,
         name: name,
       },

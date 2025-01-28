@@ -11,6 +11,7 @@ import { ModalContext } from "../Contexts/modalContext";
 import * as GoogleGenerativeAI from '@google/generative-ai';
 import { WebView } from 'react-native-webview';
 import { useNavigation } from "@react-navigation/native";
+import { ScreenNavigationProp } from "../navigation";
 
 const PostRecipe = () => {
   const API_KEY = "AIzaSyDbmkOMskQypIvPBPnX5tRk8OuOPqSWhqY";
@@ -43,19 +44,19 @@ const PostRecipe = () => {
     { label: 'Heart healthy', value: 'Heart healthy' },
     { label: 'N/A', value: 'N/A' }
   ]
-  const navigation = useNavigation();
+  const navigation = useNavigation<ScreenNavigationProp>();
   const modalCtx = useContext(ModalContext);
   const [selectedMeal, setSelectedMeal] = React.useState(null);
   const [selectedCuisine, setSelectedCuisine] = React.useState(null);
   const [instructutions, setInstruction] = useState(null);
 
   const [cookingTime, setCookingTime] = useState('30');
-  const [ingredients, setIngredients] = useState([]);
+  const [ingredients, setIngredients] = useState<string[]>([]);
   const [currIngredient, setCurrIngredient] = useState('');
   const [healthGoal, setHealthGoal] = useState(null);
   const [loading,setLoading] = useState(false);
 
-  function extractRecipe(response) {
+  function extractRecipe(response:string) {
     const lines = response.split('\n').map(line => line.trim()).filter(line => line !== '');
     const recipe = {
         name: '',
@@ -234,12 +235,11 @@ Exclude any additional text or introduction.`;
               style={[styles.dropdown]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
+              
               data={MealData}
               containerStyle={{ height: 200,borderRadius:10 }}
               maxHeight={300}
-              itemContainerStyle={{ paddingVertical: -30, height: 50, justifyContent: 'center', paddingBottom: -6, }}
+              itemContainerStyle={{ paddingVertical: 0, height: 50, justifyContent: 'center', paddingBottom: 0, }}
               itemTextStyle={{ fontSize: 14 }}
               labelField="label"
               fontFamily="Poppins"
@@ -255,12 +255,11 @@ Exclude any additional text or introduction.`;
               style={[styles.dropdown]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
+             
               data={cuisineData}
               containerStyle={{ height: 200,borderRadius:10 }}
               maxHeight={300}
-              itemContainerStyle={{ paddingVertical: -30, height: 50, justifyContent: 'center', paddingBottom: -6, }}
+              itemContainerStyle={{ paddingVertical: 0, height: 50, justifyContent: 'center', paddingBottom: 0, }}
               itemTextStyle={{ fontSize: 14 }}
               fontFamily="Poppins"
               valueField="value"
@@ -276,12 +275,11 @@ Exclude any additional text or introduction.`;
               style={[styles.dropdown]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
+              
               data={instructionData}
               containerStyle={{ height: 200,borderRadius:10 }}
               maxHeight={300}
-              itemContainerStyle={{ paddingVertical: 0, height: 53, justifyContent: 'center', paddingBottom: -6}}
+              itemContainerStyle={{ paddingVertical: 0, height: 53, justifyContent: 'center', paddingBottom: 0}}
               itemTextStyle={{ fontSize: 14 }}
               fontFamily="Poppins"
               valueField="value"
@@ -305,12 +303,11 @@ Exclude any additional text or introduction.`;
               style={[styles.dropdown]}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
+              
               data={GoalsData}
               containerStyle={{ height: 200,borderRadius:10 }}
               maxHeight={300}
-              itemContainerStyle={{ paddingVertical: 0, height: 53, justifyContent: 'center', paddingBottom: -6, }}
+              itemContainerStyle={{ paddingVertical: 0, height: 53, justifyContent: 'center', paddingBottom: 0, }}
               itemTextStyle={{ fontSize: 14 }}
               fontFamily="Poppins"
               valueField="value"
@@ -336,7 +333,7 @@ Exclude any additional text or introduction.`;
                 }}
 
                 className="w-[20%] h-[49]  rounded-2xl justify-center bg-primaryOrange  ">
-                <Typography variant="" bold class="text-white text-[15px]  text-center">Add</Typography>
+                <Typography  bold class="text-white text-[15px]  text-center">Add</Typography>
               </Pressable>
 
             </View>

@@ -1,5 +1,5 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
-import React, { useRef, useMemo, useCallback, useState } from 'react';
+import React, { useRef, useMemo, useCallback, useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 
@@ -8,55 +8,70 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { useDispatch } from 'react-redux';
-import Typography from '../components/Typography/Typography';
+import Typography from './Typography/Typography';
 import Animated, { FadeInDown } from 'react-native-reanimated';
-import { supabase } from '../lib/supabase';
 import { useAuth } from '../Contexts/AuthContext';
-import { ScrollView } from 'react-native-gesture-handler';
+import { supabase } from '../lib/supabase';
+import { NutrientsType, RecipeTypes } from '../types/recipe';
+import { ExtendedIngredient } from '../types/recipe';
 
-const RecipeOfTheDayDetails = ({ route }) => {
+type RecipeDetailsScreenProps ={
+    route:  {
+        params: {
+          recipe: RecipeTypes
+          isFav: boolean; 
+        };
+      };
+}
+
+
+
+const RecipeDetailsScreen: React.FC<RecipeDetailsScreenProps> = ({ route }) => {
 
     const [activeTab, setActiveTab] = useState('Ingredients');
-    const { recipe,isFav } = route.params;
+    const { recipe, isFav } = route.params;
     const { extendedIngredients } = recipe;
     const [isFavourite, setIsFavourite] = useState(isFav);
-    
     const {profile,fetchSession} = useAuth();
+    
+    
+    // useLayoutEffect(() => {
+    //     navigation.setOptions({
+    //       tabBarStyle: { display: 'none' }
+    //     });
+    
+    //     return () => {
+    //       navigation.setOptions({
+    //         tabBarStyle: { display: 'flex' }
+    //       });
+    //     };
+    //   }, []);
+    
+   
 
    
-    
-    
    
-   
-    // Correct use of ref with useRef()
+    
     const sheetRef = useRef(null);
 
-    // Snap points for the bottom sheet
-    const snapPoints = useMemo(() => ['64%', '87%'], []);
+   
+    const snapPoints = useMemo(() => ['65%', '87%'], []);
 
-    // Handle changes in bottom sheet
-    const handleSheetChange = useCallback((index) => {
+   
+    
 
-    }, []);
+    
+   
 
-    // Handle snap to specific points
-    const handleSnapPress = useCallback((index) => {
-        sheetRef.current?.snapToIndex(index);
-    }, []);
-
-    // Handle close bottom sheet
-    const handleClosePress = useCallback(() => {
-        sheetRef.current?.close();
-    }, []);
-
-    const formattedInstructions = recipe.instructions
+    const formattedInstructions = recipe.instructions?recipe.instructions
       .replace(/<\/?ol>/g, '')
       .replace(/<\/?li>/g, '')
       .split('.')
-  
+  : recipe.analyzedInstructions.length
+      ? recipe.analyzedInstructions[0].steps.map((step:any) => step.step)
+      : [];
 
-    const truncateSummary = (summary, maxLength) => {
+    const truncateSummary = (summary:string, maxLength:number) => {
 
         const cleanSummary = summary.replace(/<[^>]*>?/gm, '');
 
@@ -78,107 +93,99 @@ const RecipeOfTheDayDetails = ({ route }) => {
         () => Array(6).fill(0).map((_, index) => `Ingredient ${index + 1}`),
         []
     );
-    const renderItem = useCallback(
-        (item) => (
-            <View key={item} style={styles.itemContainer}>
-                <Text>{item}</Text>
-            </View>
-        ),
-        []
-    );
+    
 
 
     const maxLength = 190;
     const truncatedSummary = truncateSummary(recipe.summary, maxLength)
-    const dispatch = useDispatch();
-
-    const handleAddToFav = async (recipe) => {
+    
+    const handleAddToFav = async (recipe:RecipeTypes) => {
         try {
             setIsFavourite(true);
-      
-          
           const { data: userData, error: fetchError } = await supabase
             .from("users")
             .select("favourite_recipes")
-            .eq("id", profile.id)
+            .eq("id", profile?.id)
             .single();
-      
           if (fetchError) {
             setIsFavourite(false);
             throw new Error(fetchError.message);
-           
           }
-      
-          const currentFavs = userData?.favourite_recipes || []; 
-      
-          
-          
-      
-          
+          const currentFavs = userData?.favourite_recipes || [];        
           const updatedFavs = [...currentFavs, recipe];
-      
-        
           const { error: updateError } = await supabase
             .from("users")
             .update({ favourite_recipes: updatedFavs })
-            .eq("id", profile.id);
-      
+            .eq("id", profile?.id);      
           if (updateError) {
             setIsFavourite(false);
             throw new Error(updateError.message);
           }
           await fetchSession();
           
-        } catch (error) {
+        } catch (error:any) {
           console.error("Error adding recipe to favorites:", error.message);
         }
       };
-      const handleRemoveFromFav = async (recipe) => {
+      const handleRemoveFromFav = async (recipe:RecipeTypes) => {
         try {
           setIsFavourite(false);
-      
-          
           const { data: userData, error: fetchError } = await supabase
             .from("users")
             .select("favourite_recipes")
-            .eq("id", profile.id)
-            .single();
-      
+            .eq("id", profile?.id)
+            .single();   
           if (fetchError) {
             setIsFavourite(true);
             throw new Error(fetchError.message);
           }
-      
           const currentFavs = userData?.favourite_recipes || [];
-      
-         
-          const updatedFavs = currentFavs.filter((fav) => fav.id !== recipe.id);
-      
-         
+          const updatedFavs = currentFavs.filter((fav:RecipeTypes) => fav.id !== recipe.id);
           const { error: updateError } = await supabase
             .from("users")
             .update({ favourite_recipes: updatedFavs })
-            .eq("id", profile.id);
-      
+            .eq("id", profile?.id);
           if (updateError) {
             setIsFavourite(true);
             throw new Error(updateError.message);
           }
-      
           await fetchSession(); 
           
-        } catch (error) {
+        } catch (error:any) {
           console.error("Error removing recipe from favorites:", error.message);
         }
       };
+
+      const proteinNutrient = recipe.nutrition.nutrients.find(
+        (nutrient:NutrientsType) => nutrient.name === "Protein"
+      );
+      
+      const proteinAmount = proteinNutrient ? Math.round(proteinNutrient.amount) : 7; 
+      const calories = recipe.nutrition.nutrients.find(
+        (nutrient:NutrientsType) => nutrient.name === "Calories"
+      )?.amount || 170;
+      
+      const fat = recipe.nutrition.nutrients.find(
+        (nutrient:NutrientsType) => nutrient.name === "Fat"
+      )?.amount || 7;
+      
+      const carbohydrates = recipe.nutrition.nutrients.find(
+        (nutrient:NutrientsType) => nutrient.name === "Carbohydrates"
+      )?.amount || 40;
+      
+      
+      const roundedCalories = Math.round(calories);
+      const roundedFat = Math.round(fat);
+      const roundedCarbohydrates = Math.round(carbohydrates);
+      
+      
       
     return (
         <View style={styles.container}>
             <StatusBar style="light" />
 
             {/* Image display */}
-           
-                { isFavourite?
+            { isFavourite?
                 <Pressable className="absolute top-12 right-5 z-10 opacity-90 items-center bg-white p-3 py-[9] pt-3 rounded-full" onPress={()=>handleRemoveFromFav(recipe)}>
             <MaterialIcons name="favorite" size={29} color="#FF007A" />
             </Pressable>
@@ -187,10 +194,8 @@ const RecipeOfTheDayDetails = ({ route }) => {
             <MaterialIcons name="favorite-border" size={29} color="red" />
             </Pressable>
                 }
-                
-            
             <View style={styles.imageContainer}>
-                <Image source={require('../assets/pancake.jpg')} style={styles.image} />
+                <Image source={{ uri: recipe.image }} style={styles.image} />
             </View>
 
             {/* Bottom sheet display */}
@@ -198,13 +203,14 @@ const RecipeOfTheDayDetails = ({ route }) => {
                 ref={sheetRef}
                 index={0} // Initially show the bottom sheet at index 1 (50%)
                 snapPoints={snapPoints}
-                onChange={handleSheetChange}
+                
+                style={{paddingBottom:10}}
             >
 
-                <BottomSheetScrollView nestedScrollEnabled={true} contentContainerStyle={styles.contentContainer}>
+                <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
                     {/* Recipe Title */}
-                    <Typography variant='xl' class='pr-2  mt-[-4]' bold>{recipe.title}</Typography>
-                    <Typography variant='sm' className="opacity-70 mt-[8] mb-3">
+                    <Typography variant='xl' class='pr-2 mt-[-4]' bold>{recipe.title}</Typography>
+                    <Typography variant='sm' class="opacity-70 mt-[8] mb-3">
                         {truncatedSummary}
                     </Typography>
                     <View className="pt-4 ml-0 gap-x-1 h-auto w-[100%] flex-wrap flex-row items-center gap-y-4 justify-between">
@@ -213,26 +219,26 @@ const RecipeOfTheDayDetails = ({ route }) => {
                                 <FontAwesome6 name="wheat-awn" size={21} color="black" />
 
                             </View>
-                            <Typography variant='sm' className="ml-2 opacity-70  ">{Math.round(recipe.nutrition.nutrients[4].amount)} gm Carbs</Typography>
+                            <Typography variant='sm' class="ml-2 opacity-70  ">{roundedCarbohydrates} gm Carbs</Typography>
 
                         </View>
                         <View className="w-[48%] flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <MaterialCommunityIcons name="egg-fried" size={29} color="black" />
                             </View>
-                            <Typography variant='sm' className="ml-2 opacity-70 ">5 gm Protein</Typography>
+                            <Typography variant='sm' class="ml-2 opacity-70 ">{proteinAmount} gm Protein</Typography>
                         </View>
                         <View className="w-[48%] flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <FontAwesome5 name="pizza-slice" size={22} color="black" />
                             </View>
-                            <Typography variant='sm' className="ml-2 opacity-70 ">7 gm Fat</Typography>
+                            <Typography variant='sm' class="ml-2 opacity-70 ">{roundedFat} gm Fat</Typography>
                         </View>
                         <View className="w-[48%] flex-row  items-center">
                             <View className="h-12 w-12 justify-center items-center bg-orange-300 rounded-xl">
                                 <FontAwesome6 name="fire" size={21} color="black" />
                             </View>
-                            <Typography variant='sm' className="ml-2 opacity-70 ">{Math.round(recipe.nutrition.nutrients[0].amount)} kcal</Typography>
+                            <Typography variant='sm' class="ml-2 opacity-70 ">{roundedCalories} kcal</Typography>
                         </View>
                     </View>
 
@@ -283,8 +289,8 @@ const RecipeOfTheDayDetails = ({ route }) => {
 
                     {/* Ingredients list */}
                     {activeTab === "Ingredients" &&
-                        <ScrollView nestedScrollEnabled={true} className="mt-5 mx-1">
-                            {extendedIngredients.map((ingredient,index) => (
+                        <View className="mt-5 mx-1">
+                            {extendedIngredients.map((ingredient:ExtendedIngredient,index:number) => (
                                 <Animated.View entering={FadeInDown.springify()
                                     .damping(17)
                                     .mass(0.9)
@@ -303,14 +309,14 @@ const RecipeOfTheDayDetails = ({ route }) => {
                                     </View>
                                 </Animated.View>
                             ))}
-                        </ScrollView>
+                        </View>
 
                     }
                      {/* Instructions */}
         {activeTab === "Instructions" &&
           <View className="mt-5 mx-1">
             <Typography variant='xl' class='text-center mb-4' bold>Instructions</Typography>
-            {formattedInstructions.map((instruction, index) => (
+            {formattedInstructions.map((instruction:any, index:number) => (
                 <Animated.View entering={FadeInDown.springify()
                     .damping(17)
                     .mass(0.9)
@@ -347,6 +353,9 @@ const styles = StyleSheet.create({
         padding: 20,
         elevation: 50,
         borderRadius: 20,
+        
+        
+        
     },
     title: {
         marginTop: -5,
@@ -423,4 +432,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default RecipeOfTheDayDetails;
+export default RecipeDetailsScreen;

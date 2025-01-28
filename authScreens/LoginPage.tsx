@@ -6,12 +6,13 @@ import { useNavigation } from "@react-navigation/native";
 import { supabase } from "../lib/supabase";
 import { ModalContext } from "../Contexts/modalContext";
 import { useAuth } from "../Contexts/AuthContext";
+import { ScreenNavigationProp } from "../navigation";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
-  const navigation = useNavigation();
+  const navigation = useNavigation<ScreenNavigationProp>();
   const [loading,setLoading] = useState(false);
   const modalCtx = useContext(ModalContext);
   const {fetchSession} = useAuth();

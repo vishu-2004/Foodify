@@ -9,20 +9,21 @@ import Animated, {
 import { useNavigation } from "@react-navigation/native";
 import Typography from "../components/Typography/Typography";
 import { useAuth } from "../Contexts/AuthContext";
+import { ScreenNavigationProp } from "../navigation";
 
 const SplashScreen = () => {
   const ring1padding = useSharedValue(0);
   const ring2padding = useSharedValue(0);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<ScreenNavigationProp>();
   const { session, loading } = useAuth();
 
   useEffect(() => {
     ring1padding.value = 0;
     ring2padding.value = 0;
 
-    let ring1Timeout;
-    let ring2Timeout;
+    let ring1Timeout:any;
+    let ring2Timeout:any;
 
     if (!loading) {
        ring1Timeout = setTimeout(() => {
@@ -70,7 +71,7 @@ const SplashScreen = () => {
         </Animated.View>
       </Animated.View>
       <View style={styles.textContainer}>
-        <Typography bold className="text-white pt-10 text-[39px]">
+        <Typography bold class="text-white pt-10 text-[39px]">
           Foodify
         </Typography>
         <Typography bold class="text-white text-[20px]">

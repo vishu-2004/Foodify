@@ -10,10 +10,11 @@ import Animated, {
   SlideInDown
 
 } from "react-native-reanimated";
+import { RecipeTypes } from "../types/recipe";
 
 const Favourites = () => {
   const {profile} = useAuth();
-  const [favRecipes,setFavRecipes] = useState(profile?.favourite_recipes?profile.favourite_recipes:[])
+  const [favRecipes,setFavRecipes] = useState<any>(profile?.favourite_recipes?profile.favourite_recipes:[])
 
   useEffect(()=>{
     
@@ -55,7 +56,7 @@ const Favourites = () => {
       <ScrollView>
         {/* ///display ui */}
         <View className="flex-1 h-max pb-10 mt-[-20]">
-          {favRecipes?.length > 0 && favRecipes.map((recipe,index) => {
+          {favRecipes?.length > 0 && favRecipes.map((recipe:RecipeTypes,index:number) => {
             
 
             return (

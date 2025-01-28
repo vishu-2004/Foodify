@@ -11,12 +11,14 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchFocus, setSearchQuery } from '../redux/action';
 import { useNavigation } from '@react-navigation/native';
+import { ScreenNavigationProp } from '../navigation';
+import { RootState } from '../redux/root_reducer';
 
 const Header = ({ autoFocus = false }) => {
   const dispatch = useDispatch();
-  const searchFocus = useSelector((state) => state.recipeReducer.searchFocus);
-  const searchQuery = useSelector((state) => state.recipeReducer.searchQuery);
-  const navigation = useNavigation();
+  const searchFocus = useSelector((state:RootState) => state.recipeReducer.searchFocus);
+  const searchQuery = useSelector((state:RootState) => state.recipeReducer.searchQuery);
+  const navigation = useNavigation<ScreenNavigationProp>();
 
   const handleFocus = () => {
     if (!searchFocus) {
@@ -32,7 +34,7 @@ const Header = ({ autoFocus = false }) => {
     }
   };
 
-  const handleQueryChange = (text) => {
+  const handleQueryChange = (text:string) => {
     dispatch(setSearchQuery(text));
   };
 

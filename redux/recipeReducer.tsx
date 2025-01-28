@@ -11,7 +11,18 @@ import {
   REMOVE_FROM_FAVOURITES
 } from "./action";
 
-const initialState = {
+export interface RecipeState {
+  loading: boolean;
+  popularRecipes: any[];
+  trendingRecipes: any[];
+  recommendedRecipes: any[];
+  favourites: any[];
+  error: string | null;
+  searchFocus: boolean;
+  searchQuery: string;
+}
+
+const initialState:RecipeState = {
   loading: false,
   popularRecipes: [],
   trendingRecipes: [],
@@ -23,7 +34,7 @@ const initialState = {
 
 };
 
-export const recipeReducer = (state = initialState, action) => {
+export const recipeReducer = (state = initialState, action:any):RecipeState => {
   switch (action.type) {
     case GET_POPULAR_RECIPES:
       return { ...state, loading: true, error: null };

@@ -8,17 +8,24 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Entypo from '@expo/vector-icons/Entypo';
 
 import Typography from './Typography/Typography';
+import { ScreenNavigationProp } from '../navigation';
+import { NutrientsType, RecipeTypes } from '../types/recipe';
 
-const truncateSummary = (summary, maxLength) => {
+type LargeRecipeCardProps = {
+  recipe:RecipeTypes;
+  isFav:boolean
+}
+
+const truncateSummary = (summary:string, maxLength:number) => {
   if (summary.length <= maxLength) return summary;
   const text =  summary.slice(0, maxLength) + '...';
   return text.replace(/<[^>]*>?/gm, '');
 };
-const LargeRecipeCard = ({recipe,isFav}) => {
+const LargeRecipeCard = ({recipe,isFav}:LargeRecipeCardProps) => {
   const maxLength = 55;
   const truncatedSummary = truncateSummary(recipe.summary,maxLength)
-  let calorieNutrient = recipe.nutrition.nutrients.find(nutrient => nutrient.name === "Calories");
-  const navigation = useNavigation();
+  let calorieNutrient = recipe.nutrition.nutrients.find((nutrient:NutrientsType) => nutrient.name === "Calories");
+  const navigation = useNavigation<ScreenNavigationProp>();
   const [isFavourite,setIsFavourite] = useState(isFav);
 
   useEffect(()=>{
@@ -57,32 +64,19 @@ const LargeRecipeCard = ({recipe,isFav}) => {
         </View>
         {/* details container  */}
         <View className = "w-[56.7%] 0 h-full mt-2">
-            <Typography variant='normal' bold className = " text-gray-900">{recipe.title}</Typography>
-            <Typography variant='xsm' className = " opacity-60 mt-2 ">{truncatedSummary}</Typography>
+            <Typography variant='normal' bold class = " text-gray-900">{recipe.title}</Typography>
+            <Typography variant='xsm' class = " opacity-60 mt-2 ">{truncatedSummary}</Typography>
             {/* time and calories */}
             <View className=" mt-2 flex-row items-center opacity-60">
             <Feather name="clock" size={17} color="black" />
-            <Typography variant='xsm' className="ml-1 mt-[2px]  ">{recipe.readyInMinutes} min</Typography>
+            <Typography variant='xsm' class="ml-1 mt-[2px]  ">{recipe.readyInMinutes} min</Typography>
             <Entypo name="dot-single" size={24} color="black" />
             <View className = "opacity-90 flex-row">
               <FontAwesome6 name="fire" size={16} color="black" />
-              <Typography variant='xsm' className="ml-1 mt-[2px]  ">{calories} kcal</Typography>
+              <Typography variant='xsm' class="ml-1 mt-[2px]  ">{calories} kcal</Typography>
             </View>
             </View>
-            {/* try now btn
-            <TouchableOpacity className = "bg-orange-500 h-11  w-[130]  text-center flex-row items-center rounded-3xl p-3 mt-2 absolute top-[118] right-4" 
-            style={{
-              shadowColor: '#000',        
-              shadowOffset: { width: 0, height: 6 },
-              shadowOpacity: 0.7,        
-              shadowRadius: 5,           
-              elevation: 7,              
-            }}
-            >
-              <Text className = "text-white text-[15px] ml-3 mr-2 font-bold">Try Now</Text>
-              <AntDesign name="arrowright" size={21} color="white" />
-            </TouchableOpacity> */}
-          
+            
         </View>
 
 

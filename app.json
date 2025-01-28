@@ -11,7 +11,8 @@
       "backgroundColor": "#FFFFFF"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "foodify"
     },
     "android": {
       "adaptiveIcon": {

@@ -37,14 +37,18 @@ import Animated, {
   SlideInRight,
 } from "react-native-reanimated";
 import { useAuth } from "../Contexts/AuthContext";
+import { RootState } from "../redux/root_reducer";
+import { NutrientsType, RecipeTypes } from "../types/recipe";
+import { ScreenNavigationProp } from "../navigation";
 
 const apiKeys = [
+  "048a4f611f2e4d75bce953d398fbcbfd",
   "bb8a1024d4894906bfe4dc3b91ac778d", //vaib
   "0dacc6ea58bc46e993d43830d1a83860",
   "e000a23d8ee9421e800d820996992df3",
 ];
 
-const findWorkingApiKey = async (baseUrl) => {
+const findWorkingApiKey = async (baseUrl:string) => {
   for (let i = 0; i < apiKeys.length; i++) {
     const apiKey = apiKeys[i];
     const url = baseUrl.replace(/apiKey=([^&]+)/, `apiKey=${apiKey}`);
@@ -57,13 +61,13 @@ const findWorkingApiKey = async (baseUrl) => {
         return { apiKey, url, data };
       }
     } catch (error) {
-     
+
     }
   }
 };
 
 const HomeScreen = () => {
-  const [favList, setFavList] = useState([]);
+  const [favList, setFavList] = useState<number[]>([]);
   const { profile } = useAuth();
   useEffect(() => {
     dispatch(getPopularRecipes());
@@ -73,7 +77,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     setisLoading(true);
-    
+
     const currentFavIds =
       profile?.favourite_recipes?.map((obj) => obj.id) || [];
     setFavList(currentFavIds);
@@ -90,7 +94,7 @@ const HomeScreen = () => {
 
         const res = await findWorkingApiKey(recipeURL);
 
-        setRecipeOfDay(res.data);
+        setRecipeOfDay(res?.data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -101,7 +105,7 @@ const HomeScreen = () => {
     fetchRecipeData();
   }, []);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<ScreenNavigationProp>();
 
   const categories = [
     {
@@ -142,23 +146,22 @@ const HomeScreen = () => {
 
   const [activeCat, setActiveCat] = useState("");
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.recipeReducer.loading);
+  const loading = useSelector((state:RootState) => state.recipeReducer.loading);
   const popularRecipes = useSelector(
-    (state) => state.recipeReducer.popularRecipes || []
+    (state:RootState) => state.recipeReducer.popularRecipes || []
   );
   const trendingRecipes = useSelector(
-    (state) => state.recipeReducer.trendingRecipes || []
+    (state:RootState) => state.recipeReducer.trendingRecipes || []
   );
   const recommendedRecipes = useSelector(
-    (state) => state.recipeReducer.recommendedRecipes || []
+    (state:RootState) => state.recipeReducer.recommendedRecipes || []
   );
-  const error = useSelector((state) => state.recipeReducer.error);
+  const error = useSelector((state:RootState) => state.recipeReducer.error);
   const [catRecipes, setcatRecipes] = useState([]);
   const [isLoading, setisLoading] = useState(false);
-  const [recipeOfDay, setRecipeOfDay] = useState({});
-  const searchFocus = useSelector((state) => state.recipeReducer.searchFocus);
-  const searchQuery = useSelector((state) => state.recipeReducer.searchQuery);
-  const favourites = useSelector((state) => state.recipeReducer.favourites);
+  const [recipeOfDay, setRecipeOfDay] = useState<RecipeTypes>();
+  const searchFocus = useSelector((state:RootState) => state.recipeReducer.searchFocus);
+  
 
   if (loading) {
     return <ActivityIndicator size="large" color="#FC8019" />;
@@ -169,7 +172,7 @@ const HomeScreen = () => {
   }
   // cat api call
 
-  const handleCatSelect = async (cat) => {
+  const handleCatSelect = async (cat:string) => {
     setisLoading(true);
     setActiveCat((prevcat) => {
       if (prevcat === cat) {
@@ -186,12 +189,12 @@ const HomeScreen = () => {
       const catURL = `https://api.spoonacular.com/recipes/complexSearch?apiKey=apikey&type=${cat}&addRecipeInformation=true&number=20&addRecipeNutrition=true&instructionsRequired=true&addRecipeInstructions=true&ignorePantry=true&fillIngredients=true`;
       const response = await findWorkingApiKey(catURL);
 
-      const filteredData = response.data.results.filter(
-        (recipes) => recipes.title.length <= 60
+      const filteredData = response?.data.results.filter(
+        (recipes:RecipeTypes) => recipes.title.length <= 60
       );
       setcatRecipes(filteredData);
     } catch (error) {
-      
+
     } finally {
       setisLoading(false);
     }
@@ -219,7 +222,7 @@ const HomeScreen = () => {
         <ScrollView>
           <View className="">
             <Typography variant="normal" class="mt-3  ml-3 ">
-              Hello, {profile?.name?profile.name:""}! 👋
+              Hello, {profile?.name ? profile.name : ""}! 👋
             </Typography>
             <Text className="mt-2 ml-3 text-[28px]  font-PoppinsSemiBold  font-medium tracking-wide">
               Ready to <Text className="text-[#FC8019] font-bold">Cook</Text>{" "}
@@ -255,7 +258,7 @@ const HomeScreen = () => {
                     >
                       <View
                         className={`flex flex-row space-x-0 rounded-3xl align-middle border-amber-600 border-spacing-3 border-2 h-[45px] w-[120px] ${setActiveColor}`}
-                        style={{ paddingRight: "30px" }}
+                       
                       >
                         <Image
                           source={{ uri: cat.image }}
@@ -264,8 +267,8 @@ const HomeScreen = () => {
 
                         <Typography
                           variant="sm"
-                          className="py-[10px] px-[6px]  "
-                          style={{ marginRight: "17px" }}
+                          class="py-[10px] px-[6px]  "
+                          
                         >
                           {cat.name}
                         </Typography>
@@ -284,9 +287,9 @@ const HomeScreen = () => {
               <ScrollView>
                 {/* ///display ui */}
                 <View className="flex-1 mt-[-18] h-max pb-12">
-                  {catRecipes.map((recipe, index) => {
-                    const isFavourite =
-                      recipe.id && favList?.includes(recipe.id);
+                  {catRecipes.map((recipe:RecipeTypes, index:number) => {
+                    const isFavourite = !!(recipe.id && favList?.includes(recipe.id));
+
 
                     return (
                       <Animated.View
@@ -297,7 +300,7 @@ const HomeScreen = () => {
                           .delay(index * 100)}
                       >
                         <LargeRecipeCard
-                          index={index}
+                          
                           recipe={recipe}
                           isFav={isFavourite}
                         />
@@ -310,7 +313,7 @@ const HomeScreen = () => {
           ) : (
             <>
               {/* recipe of the day */}
-              <Typography variant="xl" bold className="ml-3 mt-3 mb-[-20px] ">
+              <Typography variant="xl" bold class="ml-3 mt-3 mb-[-20px] ">
                 Recipe of the Day
               </Typography>
               <Animated.View
@@ -333,13 +336,13 @@ const HomeScreen = () => {
                     navigation.navigate("RecipeOfTheDayDetails", {
                       recipe: recipeOfDay,
                       isFav:
-                        recipeOfDay.id && favList?.includes(recipeOfDay.id),
+                        recipeOfDay?.id && favList?.includes(recipeOfDay?.id),
                     })
                   }
                 >
-                  {/* heart icon  */}
+                  
                   <TouchableOpacity className="absolute top-3 left-3 z-10 opacity-90 items-center bg-white p-2 py-[6] pt-2 rounded-full">
-                    {recipeOfDay.id && favList?.includes(recipeOfDay.id) ? (
+                    {recipeOfDay?.id && favList?.includes(recipeOfDay?.id) ? (
                       <MaterialIcons
                         name="favorite"
                         size={24}
@@ -365,23 +368,23 @@ const HomeScreen = () => {
                     <Typography
                       variant="normal"
                       bold
-                      className="  text-gray-900"
+                      class="  text-gray-900"
                     >
                       Caramel Strawberry Pancake
                     </Typography>
-                    <Typography variant="xsm" className=" opacity-60 mt-2 ">
+                    <Typography variant="xsm" class=" opacity-60 mt-2 ">
                       "Fluffy pancakes topped with fresh, juicy strawberries"
                     </Typography>
                     {/* time and calories */}
                     <View className=" mt-2 flex-row items-center opacity-60">
                       <Feather name="clock" size={17} color="black" />
-                      <Typography variant="xsm" className="ml-1 mt-[1px] ">
+                      <Typography variant="xsm" class="ml-1 mt-[1px] ">
                         45 min
                       </Typography>
                       <Entypo name="dot-single" size={24} color="black" />
                       <View className="opacity-90 flex-row">
                         <FontAwesome6 name="fire" size={16} color="black" />
-                        <Typography variant="xsm" className="ml-1 mt-[1px]  ">
+                        <Typography variant="xsm" class="ml-1 mt-[1px]  ">
                           300 cal
                         </Typography>
                       </View>
@@ -400,14 +403,14 @@ const HomeScreen = () => {
                         navigation.navigate("RecipeOfTheDayDetails", {
                           recipe: recipeOfDay,
                           isFav:
-                            recipeOfDay.id && favList?.includes(recipeOfDay.id),
+                            recipeOfDay?.id && favList?.includes(recipeOfDay.id),
                         })
                       }
                     >
                       <Typography
                         variant="sm"
                         bold
-                        className="text-white  ml-3 mr-2 "
+                        class="text-white  ml-3 mr-2 "
                       >
                         Try Now
                       </Typography>
@@ -417,7 +420,7 @@ const HomeScreen = () => {
                 </TouchableOpacity>
               </Animated.View>
               {/* Recommended Recipes  */}
-              <Typography variant="xl" className="ml-3 mt-3 mb-2 ">
+              <Typography variant="xl" class="ml-3 mt-3 mb-2 ">
                 Recommended Recipes
               </Typography>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -438,7 +441,7 @@ const HomeScreen = () => {
                 })}
               </ScrollView>
               {/* popular Recipes */}
-              <Typography variant="xl" bold className="ml-3 mt-3 mb-[7px]  ">
+              <Typography variant="xl" bold class="ml-3 mt-3 mb-[7px]  ">
                 Popular Recipes
               </Typography>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -446,7 +449,7 @@ const HomeScreen = () => {
                   const isFavourite = recipe.id && favList?.includes(recipe.id);
 
                   let calorieNutrient = recipe.nutrition.nutrients.find(
-                    (nutrient) => nutrient.name === "Calories"
+                    (nutrient:NutrientsType) => nutrient.name === "Calories"
                   );
 
                   let calories = calorieNutrient
@@ -469,7 +472,7 @@ const HomeScreen = () => {
                 })}
               </ScrollView>
               {/* trending recipes */}
-              <Typography variant="xl" bold className="ml-3 mt-[10] mb-2 ">
+              <Typography variant="xl" bold class="ml-3 mt-[10] mb-2 ">
                 Trending Recipes
               </Typography>
               <ScrollView
@@ -481,7 +484,7 @@ const HomeScreen = () => {
                   const isFavourite = recipe.id && favList?.includes(recipe.id);
 
                   let calorieNutrient = recipe.nutrition.nutrients.find(
-                    (nutrient) => nutrient.name === "Calories"
+                    (nutrient: NutrientsType) => nutrient.name === "Calories"
                   );
 
                   let calories = calorieNutrient

@@ -14,18 +14,23 @@ import OptionPage from "../authScreens/OptionPage";
 import LoginPage from "../authScreens/LoginPage";
 import SignUpPage from "../authScreens/SignUpPage";
 import AIRecipeDisplay from "../Screens/AIRecipeDisplay";
+import { AuthStackParamList } from "../navigation";
+import { PostRecipeStackParamList,HomeStackParamList,FavouritesStackParamList,ProfileStackParamList } from "../navigation";
 
-const Stack = createStackNavigator();
+const AuthStack = createStackNavigator<AuthStackParamList>();
 
-const SharedStack = createSharedElementStackNavigator();
+const SharedStack = createSharedElementStackNavigator<HomeStackParamList>();
+const Stack = createStackNavigator<PostRecipeStackParamList >();
+const FavouriteStack = createStackNavigator<FavouritesStackParamList>();
+const ProfileStack = createStackNavigator<ProfileStackParamList>();
 
 const AuthStackNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="OptionPage" screenOptions={{ headerShown: false,animation: "slide_from_right" }}>
-      <Stack.Screen name="OptionPage" component={OptionPage} />
-      <Stack.Screen name="LogInPage" component={LoginPage} />
-      <Stack.Screen name="SignUpPage" component={SignUpPage} />
-    </Stack.Navigator>
+    <AuthStack.Navigator initialRouteName="OptionPage" screenOptions={{ headerShown: false}}>
+      <AuthStack.Screen name="OptionPage" component={OptionPage} />
+      <AuthStack.Screen name="LogInPage" component={LoginPage} />
+      <AuthStack.Screen name="SignUpPage" component={SignUpPage} />
+    </AuthStack.Navigator>
 
 
   )
@@ -33,7 +38,7 @@ const AuthStackNavigator = () => {
 
 const HomeStackNavigator = () => {
   return (
-    <SharedStack.Navigator screenOptions={{ headerShown: false ,animation: "slide_from_right"}}>
+    <SharedStack.Navigator screenOptions={{ headerShown: false }}>
       <SharedStack.Screen name="home" component={HomeScreen} />
       <SharedStack.Screen
         name="SearchScreen"
@@ -55,8 +60,8 @@ const HomeStackNavigator = () => {
     }),
   }}
   sharedElements={(route, otherRoute, showing) => {
-    const { recipeId } = route.params; // Assuming `recipeId` is passed as a param
-    return [`recipe-${recipeId}`]; // Return only the `id` of the shared element
+    const { recipeId } = route.params;
+    return [`recipe-${recipeId}`]; 
   }}
 />
 
@@ -68,24 +73,24 @@ const HomeStackNavigator = () => {
 }
 const FavouritesStackNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Favourites" component={Favourites} />
-    </Stack.Navigator>
+    <FavouriteStack.Navigator screenOptions={{ headerShown: false }}>
+      <FavouriteStack.Screen name="Favourites" component={Favourites} />
+    </FavouriteStack.Navigator>
   );
 }
 const PostRecipeStackNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false ,animation: "slide_from_right"}}>
-      <Stack.Screen name="Post Recipe" component={PostRecipe} />
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="PostRecipe" component={PostRecipe} />
       <Stack.Screen name="AiRecipeDisplay" component={AIRecipeDisplay} />
     </Stack.Navigator>
   );
 }
 const ProfileStackNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Profile" component={ProfileScreen} />
-    </Stack.Navigator>
+    <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+    </ProfileStack.Navigator>
   );
 }
 

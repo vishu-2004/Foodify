@@ -22,6 +22,7 @@ import * as FileSystem from "expo-file-system";
 import { randomUUID } from "expo-crypto";
 import { decode } from "base64-arraybuffer";
 import LinearGradient from 'react-native-linear-gradient'
+import { ScreenNavigationProp } from "../navigation";
 
 const ProfileScreen = () => {
   const [selectedImage, setSelectedImage] = useState("");
@@ -30,7 +31,7 @@ const ProfileScreen = () => {
   const [loading, setLoading] = useState(true);
   const [userName, setuserName] = useState(profile?.name ? profile.name : "");
   const [isRead, setIsRead] = useState(true);
-  const navigation = useNavigation();
+  const navigation = useNavigation<ScreenNavigationProp>();
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -39,7 +40,7 @@ const ProfileScreen = () => {
         const { data, error } = await supabase
           .from("users")
           .select("photo_url")
-          .eq("id", profile.id)
+          .eq("id", profile?.id)
           .single();
 
         if (error) throw error;
@@ -56,9 +57,9 @@ const ProfileScreen = () => {
            
           }
         }
-      } catch (err) {
+      } catch (err:any) {
         console.error("Error fetching profile image:", err);
-        setError(err.message);
+       
       } finally {
         setLoading(false);
       }
@@ -127,7 +128,7 @@ const ProfileScreen = () => {
         const { error: updateError } = await supabase
           .from("users")
           .update({ photo_url: imgPath })
-          .eq("id", profile.id);
+          .eq("id", profile?.id);
 
         if (updateError) {
           throw new Error(updateError.message);
@@ -138,7 +139,7 @@ const ProfileScreen = () => {
       } else {
         modalCtx.openModal("Note", "You did not select any image.", "OK");
       }
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error uploading image:", error.message);
       modalCtx.openModal("Error", error.message, "OK");
     }
