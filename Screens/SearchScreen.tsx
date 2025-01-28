@@ -27,9 +27,7 @@ const SearchScreen = () => {
   const apiKeys = [
     "6bf7c37e89414072b05c65f6bb5726c9",
     "cbc4ab68d74a47cfa4fc53e0d52f3666", // h and r
-    "ada7a0c82ca546439f94d61544f267e8",
-    "1043814e88d94f0a9eaeb808a6d5cdb7",
-    "6bf7c37e89414072b05c65f6bb5726c9",
+   
   ];
 
   // Function to find a working API key (optimized for concurrency)

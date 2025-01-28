@@ -43,9 +43,7 @@ import { ScreenNavigationProp } from "../navigation";
 
 const apiKeys = [
   "048a4f611f2e4d75bce953d398fbcbfd",
-  "bb8a1024d4894906bfe4dc3b91ac778d", //vaib
-  "0dacc6ea58bc46e993d43830d1a83860",
-  "e000a23d8ee9421e800d820996992df3",
+ 
 ];
 
 const findWorkingApiKey = async (baseUrl:string) => {
